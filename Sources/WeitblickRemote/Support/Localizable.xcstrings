@@ -41,6 +41,16 @@
         }
       }
     },
+    "%@: screenshots, mouse, keyboard and clipboard of this Windows session. The agent waits up to 2 minutes for your answer." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: Bildschirmfotos, Maus, Tastatur und Zwischenablage dieser Windows-Sitzung. Der Agent wartet bis zu 2 Minuten auf deine Antwort."
+          }
+        }
+      }
+    },
     "%lld changed" : {
       "localizations" : {
         "de" : {
@@ -241,6 +251,56 @@
         }
       }
     },
+    "Agent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent"
+          }
+        }
+      }
+    },
+    "Agent paused" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent pausiert"
+          }
+        }
+      }
+    },
+    "Agents connect through the weitblick-mcp helper. Each connection decides in its Security settings whether agents are asked about, always allowed or never allowed. Everything agents do is logged in ~/Library/Logs/Weitblick Remote/agent.log." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agenten verbinden sich über das Hilfsprogramm weitblick-mcp. Jede Verbindung legt in ihren Sicherheitseinstellungen fest, ob bei Agenten nachgefragt wird, ob sie immer erlaubt oder nie erlaubt sind. Alles, was Agenten tun, wird in ~/Library/Logs/Weitblick Remote/agent.log protokolliert."
+          }
+        }
+      }
+    },
+    "AI agent access" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Agent-Zugriff"
+          }
+        }
+      }
+    },
+    "AI agents (MCP)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Agenten (MCP)"
+          }
+        }
+      }
+    },
     "All Up to Date" : {
       "localizations" : {
         "de" : {
@@ -261,12 +321,52 @@
         }
       }
     },
+    "Allow for 10 minutes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 Minuten erlauben"
+          }
+        }
+      }
+    },
+    "Allow once" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einmal erlauben"
+          }
+        }
+      }
+    },
+    "Allow today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute erlauben"
+          }
+        }
+      }
+    },
     "Always" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Immer"
+          }
+        }
+      }
+    },
+    "Always allow" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer erlauben"
           }
         }
       }
@@ -311,6 +411,16 @@
         }
       }
     },
+    "An agent is controlling this session (%@)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Agent steuert diese Sitzung (%@)"
+          }
+        }
+      }
+    },
     "Another connection took over the session." : {
       "localizations" : {
         "de" : {
@@ -327,6 +437,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erscheinen unter Windows als \\\\tsclient\\<Name>."
+          }
+        }
+      }
+    },
+    "Ask" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fragen"
           }
         }
       }
@@ -571,6 +691,16 @@
         }
       }
     },
+    "Controlled by “%@”" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesteuert von „%@“"
+          }
+        }
+      }
+    },
     "Copy" : {
       "localizations" : {
         "de" : {
@@ -687,6 +817,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Löschen fehlgeschlagen"
+          }
+        }
+      }
+    },
+    "Deny" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablehnen"
           }
         }
       }
@@ -1401,6 +1541,16 @@
         }
       }
     },
+    "Let AI agents control Windows sessions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Agenten dürfen Windows-Sitzungen steuern"
+          }
+        }
+      }
+    },
     "Like Jump: right ⌥ types characters, left is Alt" : {
       "localizations" : {
         "de" : {
@@ -1611,6 +1761,16 @@
         }
       }
     },
+    "None" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine"
+          }
+        }
+      }
+    },
     "None yet. You’ll be asked on the first connection." : {
       "localizations" : {
         "de" : {
@@ -1797,6 +1957,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einsetzen"
+          }
+        }
+      }
+    },
+    "Permissions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaubnisse"
           }
         }
       }
@@ -2021,12 +2191,32 @@
         }
       }
     },
+    "Resume agent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agent fortsetzen"
+          }
+        }
+      }
+    },
     "Retina (full resolution)" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retina (volle Auflösung)"
+          }
+        }
+      }
+    },
+    "Revoke" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widerrufen"
           }
         }
       }
@@ -2227,6 +2417,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fenster"
+          }
+        }
+      }
+    },
+    "Set up Claude Code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Code einrichten"
+          }
+        }
+      }
+    },
+    "Sets this connection’s agent access to Always allow" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stellt den Agent-Zugriff dieser Verbindung auf „Immer erlauben“"
           }
         }
       }
@@ -2481,12 +2691,32 @@
         }
       }
     },
+    "Take over" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernehmen"
+          }
+        }
+      }
+    },
     "The %lld open sessions will be disconnected." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die %lld offenen Sitzungen werden getrennt."
+          }
+        }
+      }
+    },
+    "The agent loses this session. Open programs keep running in Windows." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Agent verliert diese Sitzung. Geöffnete Programme laufen in Windows weiter."
           }
         }
       }
@@ -2671,6 +2901,26 @@
         }
       }
     },
+    "This session (%@)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sitzung (%@)"
+          }
+        }
+      }
+    },
+    "This session, until it disconnects" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Sitzung, bis sie getrennt wird"
+          }
+        }
+      }
+    },
     "Timed out." : {
       "localizations" : {
         "de" : {
@@ -2791,6 +3041,26 @@
         }
       }
     },
+    "Until %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bis %@"
+          }
+        }
+      }
+    },
+    "Until midnight" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bis Mitternacht"
+          }
+        }
+      }
+    },
     "Update" : {
       "localizations" : {
         "de" : {
@@ -2861,6 +3131,26 @@
         }
       }
     },
+    "Watch" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusehen"
+          }
+        }
+      }
+    },
+    "Whether AI agents may control this connection over MCP (Settings → AI agents). “Ask” shows a prompt each time an agent wants it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ob KI-Agenten diese Verbindung über MCP steuern dürfen (Einstellungen → KI-Agenten). Bei „Fragen“ erscheint jedes Mal eine Abfrage, wenn ein Agent sie nutzen will."
+          }
+        }
+      }
+    },
     "Width" : {
       "localizations" : {
         "de" : {
@@ -2921,6 +3211,16 @@
         }
       }
     },
+    "You have taken over from the agent (%@)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast vom Agenten übernommen (%@)"
+          }
+        }
+      }
+    },
     "Zoom" : {
       "localizations" : {
         "de" : {
@@ -2947,6 +3247,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "„%@“ ist keine MAC-Adresse."
+          }
+        }
+      }
+    },
+    "“%@” on “%@”" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%1$@“ auf „%2$@“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "“%1$@” on “%2$@”"
+          }
+        }
+      }
+    },
+    "“%@” wants to control “%@”" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„%1$@“ möchte „%2$@“ steuern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "“%1$@” wants to control “%2$@”"
           }
         }
       }
