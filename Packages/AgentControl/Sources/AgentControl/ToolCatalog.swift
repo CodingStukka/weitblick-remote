@@ -132,7 +132,8 @@ public enum ToolCatalog {
         ToolDefinition(
             name: "type_text", title: "Type text",
             description: "Types text as Unicode input, independent of the keyboard layout. \\n presses Enter, "
-                + "\\t presses Tab.",
+                + "\\t presses Tab. Types about 40 characters per second, up to 5000; for long text use "
+                + "clipboard_set and key ctrl+v.",
             inputSchema: schema([
                 "session": session, "text": string("The text to type"), "screenshot": screenshotFlag,
             ], required: ["session", "text"]), readOnly: false),

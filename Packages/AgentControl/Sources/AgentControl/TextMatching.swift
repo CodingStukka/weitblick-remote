@@ -9,22 +9,23 @@ public struct TextMatch: Equatable, Sendable {
     public let errors: Int
 }
 
-/// Finds a query in OCR lines: case-, accent- and width-insensitive, tolerant of a few recognition
-/// errors (one per five characters). Exact matches win; approximate ones are only returned when
-/// there is no exact one.
+/// Finds a query in OCR lines the way OCR errs: case-, accent- and width-insensitive, blind to
+/// whitespace (recognition drops and adds spaces), characters UI fonts make look alike count as
+/// the same (l I | 1, O 0, ß B, bracket and quote shapes), and a few other errors are tolerated
+/// (one per five characters). Exact matches win; approximate ones are only returned when there is
+/// no exact one.
 public enum TextMatching {
     public static func find(_ query: String, in lines: [String], limit: Int = 20) -> [TextMatch] {
-        let needle = tokens(of: query.split(whereSeparator: \.isWhitespace).joined(separator: " "))
+        let needle = query.filter { !$0.isWhitespace }.map(token)
         guard !needle.isEmpty else { return [] }
         let allowedErrors = needle.count / 5
         var matches: [TextMatch] = []
         for (index, line) in lines.enumerated() {
-            let characters = Array(line.indices)
-            let haystack = line.map(token)
+            let positions = line.indices.filter { !line[$0].isWhitespace }
+            let haystack = positions.map { token(line[$0]) }
             for found in search(needle, in: haystack, maxErrors: allowedErrors) {
-                let start = characters[found.start]
-                let end = found.end < characters.count ? characters[found.end] : line.endIndex
-                matches.append(TextMatch(lineIndex: index, range: start..<end, errors: found.errors))
+                let range = positions[found.start]..<line.index(after: positions[found.end - 1])
+                matches.append(TextMatch(lineIndex: index, range: range, errors: found.errors))
             }
         }
         if matches.contains(where: { $0.errors == 0 }) { matches.removeAll { $0.errors > 0 } }
@@ -32,13 +33,24 @@ public enum TextMatching {
         return Array(matches.prefix(limit))
     }
 
-    static func tokens(of text: String) -> [String] { text.map(token) }
-
     /// One comparable unit per character.
     static func token(_ character: Character) -> String {
-        if character.isWhitespace { return " " }
-        return String(character).folding(options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive], locale: nil)
+        let folded = String(character).folding(options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive],
+                                               locale: nil)
+        return lookAlikes[folded] ?? folded
     }
+
+    /// Characters Vision confuses in UI fonts (after case folding, so "I" arrives as "i").
+    /// Measured on Windows 11 Notepad: "ß € @ {} \\ |" read as "B € @ {\\Il".
+    private static let lookAlikes: [String: String] = [
+        "|": "l", "1": "l", "i": "l", "!": "l", "ı": "l",
+        "0": "o",
+        "ss": "b", // "ß" folds to "ss"
+        "{": "(", "[": "(", "}": ")", "]": ")",
+        "\u{201C}": "\"", "\u{201D}": "\"", "\u{201E}": "\"", "\u{2018}": "'", "\u{2019}": "'", "\u{201A}": "'",
+        "`": "'", "\u{00B4}": "'",
+        "\u{2013}": "-", "\u{2014}": "-", "\u{2010}": "-", "\u{2212}": "-",
+    ]
 
     /// Approximate substring search (Sellers): every non-overlapping place in `haystack` within
     /// `maxErrors` edits of `needle`, best first per region. Indices are token offsets, end exclusive.

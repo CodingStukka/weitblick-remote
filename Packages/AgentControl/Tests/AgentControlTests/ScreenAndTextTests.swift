@@ -116,8 +116,19 @@ struct TextMatchingTests {
     }
 
     @Test func shortQueriesMustMatchExactly() {
-        #expect(matched("OK", ["0K", "Abbrechen"]).isEmpty)
+        #expect(matched("OK", ["UK", "Abbrechen"]).isEmpty)
         #expect(matched("OK", ["Ok"]) == ["Ok"])
+    }
+
+    @Test func lookAlikesAndSpacesDoNotCount() {
+        // Vision on Windows 11 Notepad's monospace font (mcp-e2e).
+        let typed = "Grüße ÄÖÜ ß € @ {} \\ |"
+        let read = "Grüße ÄÖÜ B € @ {\\Il"
+        #expect(matched(typed, [read]) == ["Grüße ÄÖÜ B € @ {\\I"])
+        #expect(TextMatching.find(typed, in: [read]).first?.errors == 1)
+        #expect(matched("OK", ["0K"]) == ["0K"])
+        #expect(matched("Nicht speichern", ["Nichtspeichern"]) == ["Nichtspeichern"])
+        #expect(matched("C:\\Temp\\log 1.txt", ["C:\\Temp\\Iog l.txt"]).count == 1)
     }
 
     @Test func findsEveryOccurrence() {

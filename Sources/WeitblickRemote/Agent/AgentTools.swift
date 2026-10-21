@@ -25,13 +25,15 @@ private final class ToolCall {
 
 /// The MCP tools (see `ToolCatalog` for their schemas).
 extension AgentHost {
-    /// Pauses between input events: Windows apps read modifier state asynchronously, and the
-    /// WinUI Notepad drops input that arrives in bursts.
-    private static let keyPace: Duration = .milliseconds(10)
-    private static let chordPace: Duration = .milliseconds(40)
-    private static let characterPace: Duration = .milliseconds(8)
+    /// Pauses between input events, at the pace of a fast typist: Windows apps read modifier state
+    /// asynchronously, and the WinUI Notepad mixes up Unicode characters that arrive faster (at 8 ms
+    /// per character "ÄÖÜ" arrived as "ÜÜÜ"; the keyboard e2e found the same for Shift at 4 ms).
+    private static let keyPace: Duration = .milliseconds(20)
+    private static let chordPace: Duration = .milliseconds(50)
+    private static let characterPace: Duration = .milliseconds(25)
     private static let connectTimeout: Duration = .seconds(90)
-    private static let maxTypedCharacters = 20_000
+    /// About two minutes of typing; longer texts go through the clipboard.
+    private static let maxTypedCharacters = 5_000
 
     /// Runs one tool call and writes the audit line.
     func call(_ name: String, _ arguments: JSONValue, from client: AgentClient) async -> ToolResult {
@@ -221,7 +223,24 @@ extension AgentHost {
             if !controller.isWindowVisible { controller.close() }
             throw ToolFailure(failure)
         }
-        return .text("Connected: " + describe(record) + " Take a screenshot to see it.")
+        let ready = await waitForDesktop(record)
+        return .text("Connected: " + describe(record)
+            + (ready ? " Take a screenshot to see it." : " The screen is still blank (Windows may still be signing in): wait_for_screen, then take a screenshot."))
+    }
+
+    /// After the logon Windows paints a flat white, black or blue screen for a while: wait until
+    /// there is a picture and it has settled, so the first screenshot shows the desktop.
+    private func waitForDesktop(_ record: AgentSessionRecord) async -> Bool {
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            guard let rdp = record.controller.connectedSession else { return false }
+            if !ScreenCapture.looksBlank(rdp) {
+                _ = await ScreenSettler(settle: 1, timeout: 10).wait(for: { record.controller.connectedSession })
+                return true
+            }
+            try? await Task.sleep(for: .milliseconds(250))
+        }
+        return false
     }
 
     private func disconnect(_ arguments: ToolArguments, client: AgentClient, call: ToolCall) throws -> ToolResult {

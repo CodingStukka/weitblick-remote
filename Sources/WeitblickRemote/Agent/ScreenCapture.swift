@@ -43,6 +43,27 @@ enum ScreenCapture {
         return DesktopPixels(image: image, rect: clipped)
     }
 
+    /// Whether the picture is one flat color (a session still signing in shows white, black or
+    /// blue for a while): a 64×40 grid of samples with fewer than 6 distinct colors (6 bits each).
+    @MainActor
+    static func looksBlank(_ session: RDPSession) -> Bool {
+        session.peekFramebuffer { framebuffer -> Bool in
+            guard framebuffer.width > 0, framebuffer.height > 0 else { return true }
+            var colors = Set<UInt32>()
+            for row in 0..<40 {
+                let y = (framebuffer.height - 1) * row / 39
+                for column in 0..<64 {
+                    let x = (framebuffer.width - 1) * column / 63
+                    let pixel = (framebuffer.pixels + y * framebuffer.bytesPerRow + x * 4)
+                        .withMemoryRebound(to: UInt32.self, capacity: 1) { $0.pointee }
+                    colors.insert(pixel & 0x00FC_FCFC)
+                    if colors.count >= 6 { return false }
+                }
+            }
+            return true
+        } ?? true
+    }
+
     /// BGRA32 pixels (little-endian ARGB words, alpha ignored).
     static func makeImage(_ pixels: Data, width: Int, height: Int) -> CGImage? {
         let info = CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)

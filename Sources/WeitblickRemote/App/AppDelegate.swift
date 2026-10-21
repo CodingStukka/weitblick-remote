@@ -80,6 +80,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        coordinator.agentHost.shutDown()
         coordinator.closeAllSessions()
         // exit() tears down FreeRDP's global state; the session threads must be gone first.
         RDPSession.waitForAllSessionsToClose(timeout: 5)

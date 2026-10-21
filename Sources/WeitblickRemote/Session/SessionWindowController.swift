@@ -338,7 +338,7 @@ final class SessionWindowController: NSWindowController, NSWindowDelegate, NSMen
         let timer = Task { [weak self] in
             try? await Task.sleep(for: timeout)
             guard !Task.isCancelled else { return }
-            self?.resumeConnectWaiters(String(localized: "The connection to “\(self?.connection.name ?? "")” took longer than \(Int(timeout.components.seconds)) seconds."))
+            self?.resumeConnectWaiters("The connection to “\(self?.connection.name ?? "")” took longer than \(Int(timeout.components.seconds)) seconds.")
         }
         defer { timer.cancel() }
         return await withCheckedContinuation { connectWaiters.append($0) }
@@ -436,18 +436,20 @@ final class SessionWindowController: NSWindowController, NSWindowDelegate, NSMen
         publishAgentActivity()
     }
 
+    // Messages for agents: English whatever the UI language (the model reads them).
+
     private static func missingCredentialsMessage(_ connection: Connection) -> String {
-        String(localized: "No user name or password is saved for “\(connection.name)”. Ask the user to connect once by hand in Weitblick Remote and save the password.")
+        "No user name or password is saved for “\(connection.name)”. Ask the user to connect once by hand in Weitblick Remote and save the password."
     }
 
     private static func rejectedCredentialsMessage(_ connection: Connection) -> String {
-        String(localized: "Windows rejected the saved user name or password for “\(connection.name)”. Ask the user to connect once by hand in Weitblick Remote and save the right password.")
+        "Windows rejected the saved user name or password for “\(connection.name)”. Ask the user to connect once by hand in Weitblick Remote and save the right password."
     }
 
     private static func certificateMessage(_ connection: Connection, changed: Bool) -> String {
         changed
-            ? String(localized: "The certificate of “\(connection.name)” has changed. Ask the user to connect once by hand in Weitblick Remote and check it.")
-            : String(localized: "The certificate of “\(connection.name)” isn’t trusted yet. Ask the user to connect once by hand in Weitblick Remote and trust it.")
+            ? "The certificate of “\(connection.name)” has changed. Ask the user to connect once by hand in Weitblick Remote and check it."
+            : "The certificate of “\(connection.name)” isn’t trusted yet. Ask the user to connect once by hand in Weitblick Remote and trust it."
     }
 
     // MARK: Status
@@ -670,9 +672,9 @@ final class SessionWindowController: NSWindowController, NSWindowDelegate, NSMen
         pendingResize?.cancel()
         answerCertificate(.reject)
         if agentEndMessage == nil, isAgentSession {
-            agentEndMessage = String(localized: "The session “\(connection.name)” was closed.")
+            agentEndMessage = "The session “\(connection.name)” was closed."
         }
-        resumeConnectWaiters(agentEndMessage ?? String(localized: "The session “\(connection.name)” was closed."))
+        resumeConnectWaiters(agentEndMessage ?? "The session “\(connection.name)” was closed.")
         if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
         keyMonitor = nil
         appObservers.forEach(NotificationCenter.default.removeObserver)

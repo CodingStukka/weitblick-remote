@@ -154,6 +154,11 @@ final class AgentHost {
         housekeeping = timer
     }
 
+    /// Quitting: the socket file goes away with the app.
+    func shutDown() {
+        stop()
+    }
+
     private func stop() {
         housekeeping?.invalidate()
         housekeeping = nil
