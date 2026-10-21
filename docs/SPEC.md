@@ -162,11 +162,23 @@ working while an agent drives a Windows GUI (for example AutoCAD on a lab PC).
 - Pure logic (MCP framing, tool schemas, key-combo parsing, coordinate mapping) lives in a local package
   `Packages/AgentControl` with unit tests; app glue in `Sources/WeitblickRemote/Agent/`.
 
-### Safety gates (all default off)
-- Settings → "AI agents (MCP)": master switch. Off = the socket is not even created.
-- Per connection (editor, Security page): "Allow AI agents to control this connection". Tools refuse
-  other connections with a clear message that tells the user where to enable it. Production PCs stay
-  off unless Marc enables them one by one.
+### Safety gates
+- Settings → "AI agents (MCP)": master switch, default off. Off = the socket is not even created.
+- Per connection (editor, Security page) "AI agent access": **Ask** (default) · **Always allow** ·
+  **Never**. "Never" refuses with a clear message that says where to change it (for production PCs).
+- **Ask** shows a permission prompt when an agent wants the connection (connect, or attach to an open
+  session). It names the MCP client (from `initialize` clientInfo) and the connection (name, host) and
+  offers: **Deny** · **Allow once** · **Allow for 10 minutes** · **Allow today** · **Always allow**.
+  - The prompt is a floating, non-activating panel that also shows while the app runs hidden; it does
+    not take keyboard focus (plus a notification sound). The tool call waits up to 2 minutes for an
+    answer, then fails with "no answer from the user".
+  - Allow once = this session until it disconnects. 10 minutes / today (until local midnight) = every
+    connect and tool call on that connection in that window; after expiry the next tool call asks again.
+    Always allow = switches the connection to "Always allow" (persisted). Deny = this request only.
+  - Time grants live in memory only (an app restart asks again). Settings lists active grants with
+    "Revoke"; after a revoke the next tool call on that connection asks again.
+  - One prompt per connection at a time; parallel requests for the same connection wait for that answer.
+  - Tests answer the prompt through a DEBUG launch hook, never by clicking.
 - Unknown or changed certificates and missing passwords never get resolved by an agent: the tool
   fails and asks the user to connect once by hand.
 - Audit log of every tool call (time, client, connection, tool, arguments; typed text logged by length
