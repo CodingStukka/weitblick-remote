@@ -8,6 +8,8 @@ final class SessionView: NSView {
     weak var session: RDPSession?
     /// Runs before a mouse button press or wheel event goes out (⌘-click = Ctrl-click).
     var willSendPointerPress: (() -> Void)?
+    /// False while an agent controls the session: local mouse input is dropped.
+    var acceptsLocalInput = true
 
     private let presenter = FramePresenter()
     private let cursors = RemoteCursors()
@@ -120,10 +122,15 @@ final class SessionView: NSView {
         geometry.remotePoint(for: convert(event.locationInWindow, from: nil))
     }
 
-    override func mouseMoved(with event: NSEvent) { session?.sendMouseMove(to: remotePoint(event)) }
-    override func mouseDragged(with event: NSEvent) { session?.sendMouseMove(to: remotePoint(event)) }
-    override func rightMouseDragged(with event: NSEvent) { session?.sendMouseMove(to: remotePoint(event)) }
-    override func otherMouseDragged(with event: NSEvent) { session?.sendMouseMove(to: remotePoint(event)) }
+    override func mouseMoved(with event: NSEvent) { move(event) }
+    override func mouseDragged(with event: NSEvent) { move(event) }
+    override func rightMouseDragged(with event: NSEvent) { move(event) }
+    override func otherMouseDragged(with event: NSEvent) { move(event) }
+
+    private func move(_ event: NSEvent) {
+        guard acceptsLocalInput else { return }
+        session?.sendMouseMove(to: remotePoint(event))
+    }
 
     override func mouseDown(with event: NSEvent) { send(.left, down: true, event) }
     override func mouseUp(with event: NSEvent) { send(.left, down: false, event) }
@@ -148,6 +155,7 @@ final class SessionView: NSView {
     }
 
     private func send(_ button: MouseButton, down: Bool, _ event: NSEvent) {
+        guard acceptsLocalInput else { return }
         if down { willSendPointerPress?() }
         let point = remotePoint(event)
         session?.sendMouseMove(to: point)
@@ -155,6 +163,7 @@ final class SessionView: NSView {
     }
 
     override func scrollWheel(with event: NSEvent) {
+        guard acceptsLocalInput else { return }
         let notches = scroll.add(
             deltaX: event.scrollingDeltaX, deltaY: event.scrollingDeltaY,
             precise: event.hasPreciseScrollingDeltas, gestureBegan: event.phase.contains(.began))

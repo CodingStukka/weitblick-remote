@@ -7,4 +7,7 @@ enum AppInfo {
         let info = Bundle.main.infoDictionary ?? [:]
         return info["CFBundleDisplayName"] as? String ?? info["CFBundleName"] as? String ?? ProcessInfo.processInfo.processName
     }()
+
+    /// `CFBundleShortVersionString`, e.g. "1.1.0" (MCP `serverInfo`).
+    static let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
 }

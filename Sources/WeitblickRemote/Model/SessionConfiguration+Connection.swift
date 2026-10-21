@@ -14,9 +14,11 @@ struct Credentials: Equatable, Sendable {
 extension SessionConfiguration {
     /// The one place where a saved connection becomes the settings of a session.
     /// The desktop size and scale come from the window (`DisplaySettings.desktop(…)`), the keyboard
-    /// layout from the Mac unless the connection overrides it.
+    /// layout from the Mac unless the connection overrides it. FreeRDP keeps its state next to the
+    /// connections file (`supportDirectory`), so test stores keep it out of the real folder.
     init(connection: Connection, credentials: Credentials, desktop: RemoteDesktop,
-         macKeyboardLayout: WindowsKeyboardLayoutID) {
+         macKeyboardLayout: WindowsKeyboardLayoutID,
+         supportDirectory: URL = ConnectionStore.applicationSupportDirectory) {
         self.init(host: connection.host, username: credentials.username, password: credentials.password,
                   desktopSize: desktop.size)
         port = UInt16(clamping: connection.port)
@@ -36,7 +38,7 @@ extension SessionConfiguration {
         printers = redirection.printers
         clipboard = redirection.clipboard
         drives = redirection.driveRedirection ? redirection.drives.compactMap(SharedDrive.init) : []
-        stateDirectory = ConnectionStore.applicationSupportDirectory.appending(path: "FreeRDP", directoryHint: .isDirectory)
+        stateDirectory = supportDirectory.appending(path: "FreeRDP", directoryHint: .isDirectory)
     }
 }
 

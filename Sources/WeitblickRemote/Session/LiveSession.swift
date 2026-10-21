@@ -11,14 +11,18 @@ final class LiveSession {
     let clipboard: ClipboardSync
     /// Typed in the sign-in sheet with "Save in keychain": stored once the server accepts them.
     var credentialsToSave: Credentials?
+    private let pasteboard: NSPasteboard
 
+    /// `pasteboard`: the general one for user sessions, a private named one for agent sessions
+    /// (released again at the end).
     init?(configuration: SessionConfiguration, keyboardConfig: KeyboardConfig, clipboardEnabled: Bool,
-          delegate: RDPSessionDelegate) {
+          pasteboard: NSPasteboard = .general, delegate: RDPSessionDelegate) {
         guard let session = RDPSession(configuration: configuration) else { return nil }
         self.session = session
+        self.pasteboard = pasteboard
         keyboard = SessionKeyboard(remote: session, config: keyboardConfig)
         // Created before connect(): it becomes the clipboard channel's delegate.
-        clipboard = ClipboardSync(remote: session.clipboard, pasteboard: .general)
+        clipboard = ClipboardSync(remote: session.clipboard, pasteboard: pasteboard)
         clipboard.isEnabled = clipboardEnabled
         session.delegate = delegate
     }
@@ -32,6 +36,7 @@ final class LiveSession {
         keyboard.stop()
         clipboard.stopWatching()
         clipboard.sessionWillEnd()
+        if pasteboard != .general { pasteboard.releaseGlobally() }
         session.delegate = nil
         session.close()
     }

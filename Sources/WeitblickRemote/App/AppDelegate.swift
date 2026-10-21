@@ -6,6 +6,7 @@ import WeitblickKit
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var coordinator: WindowCoordinator!
+    private var terminationSignal: DispatchSourceSignal?
 
     static func main() {
         let app = NSApplication.shared
@@ -17,6 +18,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Before launch finishes: files opened from Finder arrive before `applicationDidFinishLaunching`.
     func applicationWillFinishLaunching(_ notification: Notification) {
         let options = LaunchOptions()
+        // Launched by weitblick-mcp: no Dock icon and no menu bar until a window is shown.
+        if options.agentLaunch { NSApp.setActivationPolicy(.accessory) }
         let library = ConnectionLibrary(store: ConnectionStore(fileURL: options.storeURL),
                                         credentials: Self.credentialStore(options))
         coordinator = WindowCoordinator(library: library, options: options)
@@ -26,12 +29,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // No activate(): launched from Finder or the Dock, macOS activates the app anyway; launched
         // in the background (open -g) it must stay there.
+        handleTerminationSignal()
         Task {
+            #if DEBUG
+            let hooks = DebugHooks(coordinator: coordinator)
+            hooks.configureAgentHost()
+            #endif
             await coordinator.start()
             #if DEBUG
-            DebugHooks(coordinator: coordinator).run()
+            hooks.run()
             #endif
         }
+    }
+
+    /// SIGTERM (kill, logout scripts, tests) quits cleanly: sessions log off instead of dying.
+    private func handleTerminationSignal() {
+        signal(SIGTERM, SIG_IGN)
+        let source = DispatchSource.makeSignalSource(signal: SIGTERM, queue: .main)
+        source.setEventHandler { [weak self] in
+            MainActor.assumeIsolated {
+                self?.coordinator.quitsWithoutAsking = true
+                NSApp.terminate(nil)
+            }
+        }
+        source.resume()
+        terminationSignal = source
     }
 
     private static func credentialStore(_ options: LaunchOptions) -> any CredentialStore {

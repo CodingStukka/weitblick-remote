@@ -150,6 +150,17 @@ public final class RDPSession {
             dirtyRects: UnsafeBufferPointer(start: raw.dirtyRects, count: raw.dirtyRectCount)))
     }
 
+    /// Runs `body` with the framebuffer locked without taking the dirty rects (`dirtyRects` is
+    /// empty) or re-arming `frameReady`: for readers besides the presenter, e.g. agent screenshots.
+    public func peekFramebuffer<T>(_ body: (Framebuffer) throws -> T) rethrows -> T? {
+        var raw = WBFramebuffer()
+        guard wb_session_framebuffer_peek(rawSession, &raw), let pixels = raw.pixels else { return nil }
+        defer { wb_session_framebuffer_release(rawSession) }
+        return try body(Framebuffer(
+            pixels: pixels, width: Int(raw.width), height: Int(raw.height), bytesPerRow: Int(raw.stride),
+            dirtyRects: UnsafeBufferPointer(start: nil, count: 0)))
+    }
+
     func handle(_ event: RDPSessionEvent) {
         switch event {
         case .connected, .reconnected: state = .connected

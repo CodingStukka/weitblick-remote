@@ -51,7 +51,8 @@ struct OverviewView: View {
     private var list: some View {
         List(selection: $model.selection) {
             ForEach(model.visibleConnections) { connection in
-                ConnectionRow(connection: connection, status: model.activity.statuses[connection.id])
+                ConnectionRow(connection: connection, status: model.activity.statuses[connection.id],
+                              agent: model.activity.agents[connection.id], watch: { actions.connect([connection.id]) })
                     .tag(connection.id)
             }
         }

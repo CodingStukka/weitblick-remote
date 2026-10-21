@@ -109,6 +109,29 @@ bool wb_session_framebuffer_acquire(WBSession *session, WBFramebuffer *out) {
     return true;
 }
 
+bool wb_session_framebuffer_peek(WBSession *session, WBFramebuffer *out) {
+    if (!session || !out || !session->context)
+        return false;
+    rdpContext *context = session->context;
+    rdp_update_lock(context->update);
+
+    rdpGdi *gdi = context->gdi;
+    if (!gdi || !gdi->primary_buffer) {
+        rdp_update_unlock(context->update);
+        return false;
+    }
+    // Dirty rects and the frame signal belong to the presenter (acquire); a peek leaves them alone.
+    *out = (WBFramebuffer){
+        .pixels = gdi->primary_buffer,
+        .width = (uint32_t)gdi->width,
+        .height = (uint32_t)gdi->height,
+        .stride = gdi->stride,
+        .dirtyRects = NULL,
+        .dirtyRectCount = 0,
+    };
+    return true;
+}
+
 void wb_session_framebuffer_release(WBSession *session) {
     if (session && session->context)
         rdp_update_unlock(session->context->update);

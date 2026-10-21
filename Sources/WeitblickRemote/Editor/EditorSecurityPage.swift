@@ -36,6 +36,16 @@ struct EditorSecurityPage: View {
             } header: {
                 Text("Trusted certificates (SHA-256)")
             }
+            Section {
+                Picker("AI agent access", selection: $security.agentAccess) {
+                    Text("Ask").tag(AgentAccess.ask)
+                    Text("Always allow").tag(AgentAccess.always)
+                    Text("Never").tag(AgentAccess.never)
+                }
+            } footer: {
+                Text("Whether AI agents may control this connection over MCP (Settings → AI agents). “Ask” shows a prompt each time an agent wants it.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
         }
         .formStyle(.grouped)
     }

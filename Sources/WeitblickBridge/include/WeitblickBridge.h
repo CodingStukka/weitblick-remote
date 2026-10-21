@@ -215,6 +215,10 @@ void wb_session_destroy(WBSession *session);
 /// previous call. Returns false (and nothing is locked) if there is no framebuffer yet.
 /// Keep the lock short: decoding waits for it.
 bool wb_session_framebuffer_acquire(WBSession *session, WBFramebuffer *out);
+/// Locks the framebuffer for reading like wb_session_framebuffer_acquire, but leaves the dirty
+/// rects and the frame signal to the presenter (dirtyRectCount is 0). For other readers, such as
+/// agent screenshots. Release with wb_session_framebuffer_release.
+bool wb_session_framebuffer_peek(WBSession *session, WBFramebuffer *out);
 void wb_session_framebuffer_release(WBSession *session);
 
 /// Requests a new remote desktop size via the display-control channel. Width is rounded

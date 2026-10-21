@@ -31,6 +31,8 @@ packages:
     path: Packages/KeyboardEngine
   ConnectionStore:
     path: Packages/ConnectionStore
+  AgentControl:
+    path: Packages/AgentControl
 
 settingGroups:
   freerdpLink:
@@ -96,6 +98,14 @@ targets:
         product: KeyboardEngine
       - package: ConnectionStore
         product: ConnectionStore
+      - package: AgentControl
+        product: AgentControl
+      # The MCP stdio helper, next to the app binary in Contents/MacOS.
+      - target: weitblick-mcp
+        embed: true
+        codeSign: true
+        copy:
+          destination: executables
     scheme:
       testTargets: [WeitblickRemoteTests]
     settings:
@@ -110,13 +120,28 @@ targets:
         INFOPLIST_KEY_NSLocalNetworkUsageDescription: "Connects to Windows PCs on your local network."
         CODE_SIGN_ENTITLEMENTS: Sources/WeitblickRemote/Support/WeitblickRemote.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: nrw.neuhaus.weitblick-remote
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "2"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Weitblick Remote
         INFOPLIST_KEY_NSPrincipalClass: NSApplication
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
         INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Marc Neuhaus"
+
+  # MCP stdio server for agents: relays to the app's socket, launches the app hidden
+  # (Sources/WeitblickMCP/main.swift). Embedded in the app.
+  weitblick-mcp:
+    type: tool
+    platform: macOS
+    sources:
+      - Sources/WeitblickMCP
+    settings:
+      base:
+        PRODUCT_NAME: weitblick-mcp
+        PRODUCT_BUNDLE_IDENTIFIER: nrw.neuhaus.weitblick-remote.mcp
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "2"
+        SKIP_INSTALL: YES
 
   weitblick-smoke:
     type: tool

@@ -5,6 +5,10 @@ import SwiftUI
 struct ConnectionRow: View {
     let connection: Connection
     let status: SessionStatus?
+    /// An AI agent working in the connection's session.
+    var agent: AgentActivity?
+    /// Opens the agent's session window ("Watch").
+    var watch: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 12) {
@@ -14,6 +18,7 @@ struct ConnectionRow: View {
                 Text(address).font(.subheadline).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
             }
             Spacer(minLength: 12)
+            if let agent { agentBadge(agent) }
             VStack(alignment: .trailing, spacing: 2) {
                 if let status {
                     Text(status.label).font(.caption.weight(.medium)).foregroundStyle(status.tint)
@@ -23,6 +28,18 @@ struct ConnectionRow: View {
         }
         .padding(.vertical, 5)
         .contentShape(Rectangle())
+    }
+
+    private func agentBadge(_ agent: AgentActivity) -> some View {
+        HStack(spacing: 6) {
+            Label(agent.paused ? String(localized: "Agent paused") : String(localized: "Agent"), systemImage: "sparkles")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(agent.paused ? Color.orange : Color.accentColor)
+                .help(String(localized: "Controlled by “\(agent.client)”"))
+            if agent.windowless {
+                Button("Watch", action: watch).controlSize(.small)
+            }
+        }
     }
 
     private var icon: some View {

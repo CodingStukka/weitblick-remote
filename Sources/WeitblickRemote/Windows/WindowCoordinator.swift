@@ -15,9 +15,15 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
     let activity = SessionActivity()
     let overview: OverviewWindowController
     private(set) var sessions: [SessionWindowController] = []
-    private lazy var settings = SettingsWindowController(storeURL: library.store.fileURL)
+    private(set) var agentHost: AgentHost!
+    private lazy var settings = SettingsWindowController(storeURL: library.store.fileURL, agentHost: agentHost)
     private var started = false
     private var pendingFiles: [URL] = []
+    private var lastSessionNumber = 0
+    /// The user has seen a window of this run (an agent launch then no longer quits by itself).
+    private(set) var userInterfaceShown = false
+    /// Quit without the "open sessions" question (SIGTERM, agent launches).
+    var quitsWithoutAsking = false
 
     private static let logger = Logger(subsystem: "nrw.neuhaus.weitblick-remote", category: "windows")
 
@@ -28,14 +34,28 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
         super.init()
         overview.connect = { [weak self] ids in ids.forEach { self?.connect($0) } }
         overview.canClose = { [weak self] in self?.sessions.isEmpty ?? true }
+        agentHost = AgentHost(coordinator: self, socketURL: options.agentSocketURL, logURL: options.agentLogURL)
     }
 
     /// Loads the connections, shows the overview and offers the Jump migration on the first start.
+    /// Launched for an agent (`--agent-launch`) it shows nothing and only serves MCP.
     func start() async {
         await library.load()
-        showOverview()
         started = true
-        if library.isFirstStart, library.loadError == nil, overview.jumpAvailable {
+        agentHost.applyMasterSwitch()
+        if options.agentLaunch {
+            guard agentHost.isRunning || !pendingFiles.isEmpty else {
+                // Agents are off (or another copy serves the socket): nothing to do.
+                Self.logger.notice("agent launch without a running MCP server: quitting")
+                quitsWithoutAsking = true
+                NSApp.terminate(nil)
+                return
+            }
+            if !pendingFiles.isEmpty { showOverview() }
+        } else {
+            showOverview()
+        }
+        if !options.agentLaunch, library.isFirstStart, library.loadError == nil, overview.jumpAvailable {
             overview.importFromJump()
         }
         if !pendingFiles.isEmpty {
@@ -45,8 +65,16 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
     }
 
     @objc func showOverview(_ sender: Any? = nil) {
+        becomeRegularApp()
         overview.window?.tabGroup?.selectedWindow = overview.window
         overview.window?.makeKeyAndOrderFront(nil)
+    }
+
+    /// An agent launch runs as an accessory app (no Dock icon); a window for the user brings the
+    /// Dock icon and the menu bar back.
+    private func becomeRegularApp() {
+        userInterfaceShown = true
+        if NSApp.activationPolicy() != .regular { NSApp.setActivationPolicy(.regular) }
     }
 
     // MARK: Menu commands (File, Settings)
@@ -67,6 +95,7 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
     }
 
     @objc func showSettings(_ sender: Any?) {
+        becomeRegularApp()
         settings.showWindow(nil)
     }
 
@@ -76,10 +105,16 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
 
     // MARK: Sessions
 
-    /// Opens a session for the connection, or brings its running session to the front.
+    /// Opens a session for the connection, or brings its running session to the front (an agent's
+    /// windowless session gets its window: "Watch").
     func connect(_ id: UUID) {
         if let running = sessions.first(where: { $0.connectionID == id }) {
-            running.activate()
+            if !running.wasPresented {
+                present(running)
+                running.publishAgentActivity()
+            } else {
+                running.activate()
+            }
             return
         }
         guard let connection = library.connection(with: id) else { return }
@@ -87,13 +122,52 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
             openScreenSharing(connection)
             return
         }
-        let controller = SessionWindowController(connection: connection, library: library, activity: activity)
-        controller.onClose = { [weak self, weak controller] in
-            self?.sessions.removeAll { $0 === controller }
-        }
-        sessions.append(controller)
+        let controller = SessionWindowController(connection: connection, library: library, activity: activity,
+                                                 sessionID: makeSessionID())
+        track(controller)
         present(controller)
         controller.start()
+    }
+
+    /// Ids agents use for sessions: s1, s2, … for this run of the app.
+    func makeSessionID() -> String {
+        lastSessionNumber += 1
+        return "s\(lastSessionNumber)"
+    }
+
+    /// Starts a windowless agent session (`sessionID` from `makeSessionID`).
+    func openAgentSession(_ connection: Connection, sessionID: String, desktop: PixelSize) -> SessionWindowController {
+        let controller = SessionWindowController(connection: connection, library: library, activity: activity,
+                                                 sessionID: sessionID, agentDesktop: desktop)
+        track(controller)
+        controller.start()
+        return controller
+    }
+
+    private func track(_ controller: SessionWindowController) {
+        controller.onClose = { [weak self, weak controller] in
+            guard let self, let controller else { return }
+            sessions.removeAll { $0 === controller }
+            agentHost.sessionClosed(controller)
+        }
+        sessions.append(controller)
+    }
+
+    /// Shows an agent session's tab without activating the app or switching the user's tab.
+    func presentQuietly(_ controller: SessionWindowController) {
+        guard let window = controller.window, !controller.wasPresented else { return }
+        controller.wasPresented = true
+        becomeRegularApp()
+        if !AppSettings.sessionsInOwnWindows, let overviewWindow = overview.window,
+           overviewWindow.isVisible || (overviewWindow.tabGroup?.windows.count ?? 0) > 1 {
+            let group = overviewWindow.tabGroup
+            let selected = group?.selectedWindow
+            (group?.windows.last ?? overviewWindow).addTabbedWindow(window, ordered: .above)
+            if let selected { group?.selectedWindow = selected }
+        } else {
+            window.orderFront(nil)
+        }
+        controller.publishAgentActivity()
     }
 
     private func openScreenSharing(_ connection: Connection) {
@@ -105,6 +179,8 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
     /// As the last tab of the overview's group, or as an own window (setting, or overview closed).
     private func present(_ controller: SessionWindowController) {
         guard let window = controller.window, let overviewWindow = overview.window else { return }
+        controller.wasPresented = true
+        becomeRegularApp()
         if AppSettings.sessionsInOwnWindows {
             // .disallowed only while showing it, so automatic tabbing can't pull it into a group;
             // "Merge All Windows" still works afterwards.
@@ -126,7 +202,7 @@ final class WindowCoordinator: NSObject, NSMenuItemValidation, NSMenuDelegate {
 
     func shouldTerminate() -> NSApplication.TerminateReply {
         let open = sessions.count
-        guard open > 0 else { return .terminateNow }
+        guard open > 0, !quitsWithoutAsking else { return .terminateNow }
         let alert = NSAlert()
         alert.messageText = String(localized: "Quit \(AppInfo.name)?")
         alert.informativeText = open == 1

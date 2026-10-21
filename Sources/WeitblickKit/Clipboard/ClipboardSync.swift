@@ -30,6 +30,10 @@ public final class ClipboardSync: RemoteClipboardDelegate {
     public private(set) var acceptedAnnouncements = 0
     /// Server clipboard changes published to the pasteboard.
     public private(set) var publishedRemoteChanges = 0
+    /// Format lists the server announced (counted even while disabled); lets agents see a copy land.
+    public private(set) var remoteChangeCount = 0
+    /// Whether the clipboard channel is up.
+    public var isChannelReady: Bool { channelReady }
 
     private let remote: RemoteClipboard
     private let pasteboard: NSPasteboard
@@ -44,6 +48,11 @@ public final class ClipboardSync: RemoteClipboardDelegate {
     private var ownChangeCount: Int?
     private var announced: [UInt32: (flavor: any ClipboardFlavor, format: WindowsClipboardFormat)] = [:]
     private var promise: RemotePasteboardPromise?
+    /// The server's latest format list.
+    private var remoteFormats: [RemoteClipboardFormat] = []
+    /// Text an agent put on the server clipboard (`offerText`); the server's clipboard owner is us
+    /// until it announces a change or the pasteboard is announced again.
+    private var offeredText: String?
     private nonisolated let files: ClipboardFiles
     private var poller: DispatchSourceTimer?
     private nonisolated static let logger = Logger(subsystem: "nrw.neuhaus.weitblick-remote", category: "clipboard")
@@ -132,12 +141,18 @@ public final class ClipboardSync: RemoteClipboardDelegate {
         // The channel wants an initial list even if empty; later empty lists mean nothing to send.
         guard force || !formats.isEmpty else { return }
         Self.logger.notice("announcing \(formats.count) formats: \(formats.map { $0.name ?? String($0.id) }, privacy: .public)")
+        offeredText = nil
         remote.announce(formats)
     }
 
     private func respond(to formatID: UInt32) {
         let remote = remote
         let maxDataSize = maxDataSize
+        if let offeredText, formatID == Self.unicodeTextID {
+            let data = WindowsText.encode(offeredText)
+            responder.async { remote.respond(with: data) }
+            return
+        }
         if isEnabled, formatID == files.announcedFormatID {
             return files.respondWithDescriptor(on: responder)
         }
@@ -164,9 +179,51 @@ public final class ClipboardSync: RemoteClipboardDelegate {
         return nil
     }
 
+    // MARK: Text for agents (never touches the pasteboard)
+
+    private static let unicodeTextID: UInt32 = 13
+
+    /// The server clipboard as text, read straight from the channel: the text an agent offered if
+    /// it is still the server's clipboard, else the server's CF_UNICODETEXT. nil when the clipboard
+    /// holds no text, the channel is down or the server does not answer within `timeout`.
+    public func remoteText(timeout: TimeInterval = 10) async -> String? {
+        if let offeredText { return offeredText }
+        guard channelReady, let format = remoteFormats.first(where: WindowsClipboardFormat.unicodeText.matches)
+        else { return nil }
+        let fetcher = fetcher
+        let data = await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                continuation.resume(returning: fetcher.fetch(formatID: format.id, timeout: timeout))
+            }
+        }
+        return data.map(WindowsText.decode)
+    }
+
+    /// Puts text on the server clipboard (announces CF_UNICODETEXT and answers the server's request
+    /// with it, also while the sync is off). true once the server accepted the format list.
+    public func offerText(_ text: String, timeout: TimeInterval = 5) async -> Bool {
+        guard channelReady else { return false }
+        let before = acceptedAnnouncements
+        announced = [:]
+        files.clearAnnouncement()
+        offeredText = text
+        guard remote.announce([RemoteClipboardFormat(id: Self.unicodeTextID)]) else {
+            offeredText = nil
+            return false
+        }
+        let deadline = Date().addingTimeInterval(timeout)
+        while acceptedAnnouncements == before, Date() < deadline {
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+        return acceptedAnnouncements > before
+    }
+
     // MARK: Windows -> Mac
 
     private func publish(_ formats: [RemoteClipboardFormat]) {
+        remoteFormats = formats
+        remoteChangeCount += 1
+        offeredText = nil
         guard isEnabled else { return }
         Self.logger.notice("server clipboard: \(formats.map { $0.name ?? String($0.id) }, privacy: .public)")
         // Copied files (Explorer) come with names and shell formats, but the files are the content.
@@ -260,6 +317,8 @@ public final class ClipboardSync: RemoteClipboardDelegate {
         onMain { sync in
             sync.channelReady = false
             sync.announced = [:]
+            sync.remoteFormats = []
+            sync.offeredText = nil
             sync.files.clearAnnouncement()
         }
     }

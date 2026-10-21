@@ -1,4 +1,5 @@
 #if DEBUG
+import AgentControl
 import AppKit
 import ConnectionStore
 import WeitblickKit
@@ -17,6 +18,10 @@ import SwiftUI
 ///     --debug-import-confirm <s>   applies the open Jump import after s seconds (to reach the report)
 ///     --debug-select-tab <n>@<s>   selects tab n (0 = overview, 1… sessions) after s seconds (repeatable)
 ///     --debug-dark                 dark appearance
+///     --debug-agent-prompt <list>  answers the agent permission prompts in order (deny, once,
+///                                  ten-minutes, today, always; "none" = nobody answers)
+///     --debug-agent-grant-seconds <s>   "Allow for 10 minutes" lasts s seconds instead
+///     --debug-agent-prompt-timeout <s>  the prompt waits s seconds instead of 2 minutes
 @MainActor
 struct DebugHooks {
     let coordinator: WindowCoordinator
@@ -29,6 +34,20 @@ struct DebugHooks {
         let store = InMemoryCredentialStore()
         testCredentials = store
         return store
+    }
+
+    /// Agent test settings; before `start()` so the first MCP client already sees them.
+    func configureAgentHost() {
+        let host = coordinator.agentHost!
+        if let list = value("--debug-agent-prompt") {
+            host.scriptedAnswers = list.split(separator: ",").compactMap { PromptAnswer(rawValue: String($0)) }
+        }
+        if let seconds = value("--debug-agent-grant-seconds").flatMap(Double.init) {
+            host.gate.timedGrantDuration = seconds
+        }
+        if let seconds = value("--debug-agent-prompt-timeout").flatMap(Double.init) {
+            host.gate.promptTimeout = .seconds(seconds)
+        }
     }
 
     func run() {

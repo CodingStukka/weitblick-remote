@@ -15,10 +15,10 @@ instances run directly (never via LaunchServices) with temp store/socket/log, bu
   coordinate mapping, access gate, frame diff, text matching, audit formatting) + unit tests (60 green)
 - [x] 3 KeyboardEngine: KLID → Mac layout (reverse table) for `key` (113 green); ConnectionStore:
   `security.agentAccess` (ask/always/never, tolerant decoding; 33 green)
-- [ ] 4 Bridge `wb_session_framebuffer_peek` + WeitblickKit wrapper; ClipboardSync text API for agents
-- [ ] 5 App glue (`Sources/WeitblickRemote/Agent/`): socket server, host, tools, capture, OCR, prompt panel,
+- [x] 4 Bridge `wb_session_framebuffer_peek` + WeitblickKit wrapper; ClipboardSync text API for agents
+- [x] 5 App glue (`Sources/WeitblickRemote/Agent/`): socket server, host, tools, capture, OCR, prompt panel,
   audit log, overlay/take over, overview badge + Watch, settings, editor
-- [ ] 6 Helper `weitblick-mcp` (stdio relay, hidden launch) embedded in Contents/MacOS
+- [x] 6 Helper `weitblick-mcp` (stdio relay, hidden launch) embedded in Contents/MacOS
 - [ ] 7 Build + unit tests (AgentControl, app, KeyboardEngine, ConnectionStore)
 - [ ] 8 `scripts/mcp-e2e.sh` 3× green against the VM
 - [ ] 9 Real client check (`claude -p … --model haiku`)
@@ -36,6 +36,13 @@ instances run directly (never via LaunchServices) with temp store/socket/log, bu
 - `weitblick-mcp`: tiny Swift tool in `Contents/MacOS/`, relays stdin/stdout ↔ Unix socket.
 
 ## Decisions
+
+- **Accepted sockets are made blocking:** on macOS `accept` inherits O_NONBLOCK from the listener, and a
+  screenshot reply (~1–2 MB base64) is larger than the socket buffer; replies are written blocking on a per-client
+  queue, and `close()` calls `shutdown` first so a peer that stopped reading can't wedge that queue.
+- **Agent launch quits by itself:** `--agent-launch` without a running MCP server (switch off, socket taken) quits
+  at once; with a server it quits 60 s after the last client and session are gone, unless the user opened a
+  window. The helper never reopens a running app (reopening could show or hide the user's windows).
 
 - **Spec change mid-task (coordinator, Marc, commit 1dfb5f7):** the per-connection gate became a permission prompt
   instead of a plain opt-in toggle: "AI agent access" = Ask (default) / Always allow / Never; Ask shows a floating
@@ -86,6 +93,13 @@ instances run directly (never via LaunchServices) with temp store/socket/log, bu
 - AgentControl package + tests written: 60 tests green (`swift test`).
 - KeyboardEngine: reverse KLID lookup + `init(windowsLayout:)`, 2 new tests, 113 green.
 - ConnectionStore: `agentAccess`, 1 new test (old JSON → ask, unknown → ask, never round-trips), 33 green.
+- Bridge `wb_session_framebuffer_peek` (copies without taking dirty rects, so a watched agent session keeps
+  drawing); ClipboardSync agent API (`remoteText`, `offerText`, `remoteChangeCount`), Mac pasteboard untouched.
+- App glue written: socket server, host, 19 tools, capture/settle, Vision OCR, prompt panels, audit log, banner +
+  take over, overview badge + Watch, Settings section, editor picker, SIGTERM quit, DEBUG agent flags.
+- Helper `weitblick-mcp` (stdio relay, master-switch check via the app's defaults domain, hidden launch;
+  `WEITBLICK_MCP_APP` spawns a test executable instead). Embedded via XcodeGen `copy: executables`.
+- First full build green (`scripts/build.sh`); `codesign --verify --strict --deep` valid, helper hardened.
 
 ## Not verified live (Marc should try)
 
