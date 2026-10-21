@@ -144,6 +144,69 @@ confirmation) and again at any time through "File → Import from Jump Desktop�
   ⌃⌥⌫ → Ctrl+Alt+Delete. Custom mappings that differ in the profile are imported as rules.
 - Afterwards an import report: what was taken over and what was not (with the reason).
 
+## Agent control over MCP (M7)
+AI agents (Claude Code, Codex, any MCP client) use Weitblick Remote as a "computer use" tool for Windows
+machines: screenshots, mouse, keyboard, clipboard and on-screen text over RDP. The point over desktop
+automation on the Mac: everything travels inside the RDP protocol, so an agent never moves the Mac's
+mouse, never types into the Mac, never takes focus and never touches the Mac's pasteboard. Marc keeps
+working while an agent drives a Windows GUI (for example AutoCAD on a lab PC).
+
+### Shape
+- **The app is the host.** It owns sessions, the connection store, the keychain passwords and trusted
+  certificates. It serves MCP (JSON-RPC 2.0, newline-delimited, tools only) on a Unix socket
+  `~/Library/Application Support/Weitblick Remote/mcp.sock` (mode 0600; path overridable for tests).
+- **`weitblick-mcp`**, a small stdio helper in `Weitblick Remote.app/Contents/MacOS/`, relays stdin/stdout
+  to the socket. If the app does not run, it launches it hidden in the background (no activation, no
+  window) and waits for the socket. Setup is one line:
+  `claude mcp add weitblick -- "/Applications/Weitblick Remote.app/Contents/MacOS/weitblick-mcp"`.
+- Pure logic (MCP framing, tool schemas, key-combo parsing, coordinate mapping) lives in a local package
+  `Packages/AgentControl` with unit tests; app glue in `Sources/WeitblickRemote/Agent/`.
+
+### Safety gates (all default off)
+- Settings → "AI agents (MCP)": master switch. Off = the socket is not even created.
+- Per connection (editor, Security page): "Allow AI agents to control this connection". Tools refuse
+  other connections with a clear message that tells the user where to enable it. Production PCs stay
+  off unless Marc enables them one by one.
+- Unknown or changed certificates and missing passwords never get resolved by an agent: the tool
+  fails and asks the user to connect once by hand.
+- Audit log of every tool call (time, client, connection, tool, arguments; typed text logged by length
+  only) in `~/Library/Logs/Weitblick Remote/agent.log`.
+
+### Sessions
+- Agent sessions run inside the app **without a window** by default. The overview lists them with an
+  agent badge and a "Watch" button; only a user action opens the tab. `connect` with `show: true`
+  opens a tab without activating the app.
+- A visible tab of an agent-controlled session blocks local input with an overlay ("An agent is
+  controlling this session · Take over"). Take over pauses the agent (its tools return "paused by the
+  user") until "Resume agent".
+- An agent may attach to a session the user already has open on an allowed connection; the overlay
+  then appears in that tab.
+- Agent sessions use a fixed desktop size, default 1280×800 at 100 % scale, so screenshot pixels are
+  click coordinates. Attached user sessions are downscaled for screenshots (long side ≤ 1280) and
+  coordinates are mapped back; tool results state the scale.
+- Agent-only sessions never sync with the Mac's general pasteboard (isolated clipboard).
+- Sessions an MCP client opened close when that client disconnects, and after 30 min without a tool call.
+- Windows client editions allow one session: connecting kicks the console user, like a normal login.
+
+### Tools
+Coordinates are in screenshot pixels. Input actions accept `screenshot: true` to return a screenshot
+once the screen has settled.
+- `list_connections` (name, host, agent allowed, open sessions), `list_sessions`
+- `connect(connection, width?, height?, show?)` → session id and desktop size, once the desktop is up;
+  `disconnect(session)`
+- `screenshot(session, region?)` → image (PNG, JPEG when large) plus size, scale, cursor position
+- `click(session, x, y, button?, count?, modifiers?)`, `mouse_move`, `mouse_down`, `mouse_up`,
+  `drag(session, path, button?)`, `scroll(session, x, y, dx, dy)` (wheel notches)
+- `type_text(session, text)`: Unicode input events, independent of the keyboard layout; `\n` = Enter,
+  `\t` = Tab
+- `key(session, keys, repeat?)`: Windows combos like `ctrl+shift+esc`, `win+r`, `alt+f4`, `enter`,
+  `f5`. Letters and symbols are resolved through the session's keyboard layout, so `ctrl+z` presses the
+  key that types "z" (on German layouts the physical Y key)
+- `clipboard_get(session)` / `clipboard_set(session, text)`: text over cliprdr
+- `wait(session, seconds)`, `wait_for_screen(session, timeout?, settle_ms?)`: until frames stop changing
+- `read_screen(session, region?)` / `find_text(session, query, region?)`: on-device OCR (Apple Vision,
+  German and English) with boxes and click points in screenshot coordinates
+
 ## Milestones
 - **M1** Core: FreeRDP build, bridge, session window with picture, mouse, scrolling, cursor shapes,
   dynamic resolution, Retina. Headless smoke test.
@@ -152,5 +215,6 @@ confirmation) and again at any time through "File → Import from Jump Desktop�
 - **M4** Connection management, Jump import, keychain, certificate trust (TOFU), sign-in dialog.
 - **M5** Drives, audio, files over the clipboard, auto-reconnect, full screen polish.
 - **M6** H.264 via VideoToolbox, printers, multi-monitor, gateway (as needed).
+- **M7** Agent control over MCP (see above), released as 1.1.0 after Marc's go.
 
 Done means: Marc uses Weitblick Remote instead of Jump for his RDP targets.
