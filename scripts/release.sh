@@ -20,9 +20,10 @@ if [[ -z "${WEITBLICK_BUILD_LOCKED:-}" ]]; then
   exec lockf -t 1800 /tmp/weitblick-build.lock "$0" "$@"
 fi
 
-PROJECT_VERSION=$(sed -n 's/^ *MARKETING_VERSION: "\(.*\)"$/\1/p' project.yml)
-[[ "$VERSION" == "$PROJECT_VERSION" ]] || {
-  echo "version $VERSION does not match MARKETING_VERSION $PROJECT_VERSION in project.yml" >&2; exit 1; }
+# Every target (app, weitblick-mcp) carries its own MARKETING_VERSION; all must match.
+PROJECT_VERSIONS=$(sed -n 's/^ *MARKETING_VERSION: "\(.*\)"$/\1/p' project.yml | sort -u | paste -sd ' ' -)
+[[ "$VERSION" == "$PROJECT_VERSIONS" ]] || {
+  echo "version $VERSION does not match MARKETING_VERSION ($PROJECT_VERSIONS) in project.yml" >&2; exit 1; }
 
 APP_NAME="Weitblick Remote"
 OUT="$ROOT/build/release"
