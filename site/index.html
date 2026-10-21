@@ -32,6 +32,7 @@
     <nav class="nav-links" aria-label="Sections">
       <a href="#features">Features</a>
       <a href="#keyboard">Keyboard</a>
+      <a href="#agents">AI agents</a>
       <a href="#screenshots">Screenshots</a>
       <a href="#install">Install</a>
       <a href="#faq">FAQ</a>
@@ -253,7 +254,33 @@
   </div>
 </section>
 
-<section id="screenshots" class="alt" aria-labelledby="screenshots-title">
+<section id="agents" class="alt" aria-labelledby="agents-title">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">AI agents</span>
+      <h2 id="agents-title">Let an AI agent work in Windows while you keep using your Mac</h2>
+      <p>Weitblick Remote is also an MCP server. Claude Code, Codex or any other MCP client can open a connection, look at the screen, click, type, read on-screen text and use the clipboard. All of it travels inside the RDP connection: the agent never moves your Mac’s pointer, never types into your apps and never takes focus.</p>
+    </div>
+    <div class="terminal"><pre><code>claude mcp add weitblick -- "/Applications/Weitblick Remote.app/Contents/MacOS/weitblick-mcp"</code></pre></div>
+    <p>Then turn on <span class="ui">Settings → AI agents (MCP)</span>. It is off until you do.</p>
+    <div class="keymap-notes">
+      <div>
+        <h3>You decide, per connection</h3>
+        <p>Each connection is set to Ask (the default), Always allow or Never. Ask shows a prompt naming the agent and the PC: deny, allow once, for 10 minutes, for today, or always. Every action lands in an audit log.</p>
+      </div>
+      <div>
+        <h3>Watch or take over</h3>
+        <p>Agent sessions run without a window and show up in the overview. Click Watch to follow along in a tab, and Take over to pause the agent and use the session yourself.</p>
+      </div>
+      <div>
+        <h3>Made for agents</h3>
+        <p>Pixel-exact 1280×800 desktops, typing that does not depend on the keyboard layout, Windows key combos like Win+R, waiting until the screen settles, and on-device text recognition to find buttons by their label.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screenshots" aria-labelledby="screenshots-title">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Screenshots</span>
@@ -295,7 +322,7 @@
   </div>
 </section>
 
-<section id="install" aria-labelledby="install-title">
+<section id="install" class="alt" aria-labelledby="install-title">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Installation</span>
@@ -346,7 +373,7 @@
   </div>
 </section>
 
-<section id="faq" class="alt" aria-labelledby="faq-title">
+<section id="faq" aria-labelledby="faq-title">
   <div class="wrap">
     <div class="section-head center">
       <span class="eyebrow">FAQ</span>
@@ -406,7 +433,7 @@
   </div>
 </section>
 
-<section id="source" aria-labelledby="source-title">
+<section id="source" class="alt" aria-labelledby="source-title">
   <div class="wrap split">
     <div>
       <span class="eyebrow">Building from source</span>
