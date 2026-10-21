@@ -109,6 +109,25 @@ struct ConfigurationTests {
         #expect(WindowsKeyboardLayoutID(notation: "123456789") == nil)
     }
 
+    @Test func macLayoutForWindowsLayout() {
+        #expect(WindowsKeyboardLayoutID.german.macInputSourceID == "com.apple.keylayout.German")
+        #expect(WindowsKeyboardLayoutID.usEnglish.macInputSourceID == "com.apple.keylayout.US")
+        #expect(WindowsKeyboardLayoutID(0x0807).macInputSourceID == "com.apple.keylayout.SwissGerman")
+        #expect(WindowsKeyboardLayoutID(0x0809).macInputSourceID == "com.apple.keylayout.British")
+        #expect(WindowsKeyboardLayoutID(0x0001_0409).macInputSourceID == "com.apple.keylayout.Dvorak")
+        #expect(WindowsKeyboardLayoutID(0x0000_1234).macInputSourceID == nil)
+        #expect(WindowsKeyboardLayoutID.usEnglish.typicalKeyboardType == .ansi)
+        #expect(WindowsKeyboardLayoutID(0x0002_0409).typicalKeyboardType == .ansi)
+        #expect(WindowsKeyboardLayoutID.german.typicalKeyboardType == .iso)
+        #expect(WindowsKeyboardLayoutID(0x0411).typicalKeyboardType == .jis)
+    }
+
+    @Test func layoutLoadedForAWindowsLayoutRoundTrips() {
+        #expect(Layouts.forWindowsGerman.inputSourceID == "com.apple.keylayout.German")
+        #expect(Layouts.forWindowsGerman.keyboardType == .iso)
+        #expect(Layouts.forWindowsGerman.windowsLayoutID == .german)
+    }
+
     @Test func realInputSourceKnowsItsWindowsLayout() {
         #expect(Layouts.german.windowsLayoutID == .german)
         #expect(Layouts.swissGerman.windowsLayoutID == WindowsKeyboardLayoutID(0x0807))

@@ -27,6 +27,22 @@ public struct UCKeyTranslateLayoutProvider: KeyboardLayoutProvider {
         self.init(source: source, keyboardTypeCode: keyboardTypeCode)
     }
 
+    /// The Mac layout that types like a Windows layout, on the keyboard type that layout is usually
+    /// typed on (US: ANSI, Japanese: JIS, others: ISO). Falls back to US for layouts without a Mac
+    /// counterpart. For resolving characters of remote shortcuts without a local key event.
+    public init?(windowsLayout: WindowsKeyboardLayoutID) {
+        let keyboardTypeCode: UInt32 = switch windowsLayout.typicalKeyboardType {
+        case .ansi: 40
+        case .iso: 41
+        case .jis: 42
+        }
+        if let id = windowsLayout.macInputSourceID, let layout = Self(inputSourceID: id, keyboardTypeCode: keyboardTypeCode) {
+            self = layout
+        } else {
+            self.init(inputSourceID: "com.apple.keylayout.US", keyboardTypeCode: keyboardTypeCode)
+        }
+    }
+
     /// The layout currently used for typing (for input methods: their underlying layout).
     public static func current(keyboardTypeCode: UInt32? = nil) -> UCKeyTranslateLayoutProvider? {
         let candidates = [

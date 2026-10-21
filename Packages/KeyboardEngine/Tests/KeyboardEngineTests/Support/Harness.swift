@@ -10,6 +10,8 @@ enum Layouts {
     static var swissGerman: UCKeyTranslateLayoutProvider { all.swissGerman }
     static var russian: UCKeyTranslateLayoutProvider { all.russian }
     static var osage: UCKeyTranslateLayoutProvider { all.osage }
+    /// Loaded through `init(windowsLayout:)` for KLID 00000407.
+    static var forWindowsGerman: UCKeyTranslateLayoutProvider { all.forWindowsGerman }
 
     private static let all = (
         german: load("com.apple.keylayout.German", keyboardTypeCode: 41),
@@ -17,7 +19,8 @@ enum Layouts {
         usOnISO: load("com.apple.keylayout.US", keyboardTypeCode: 41),
         swissGerman: load("com.apple.keylayout.SwissGerman", keyboardTypeCode: 41),
         russian: load("com.apple.keylayout.Russian", keyboardTypeCode: 41),
-        osage: load("com.apple.keylayout.Osage-QWERTY", keyboardTypeCode: 40)
+        osage: load("com.apple.keylayout.Osage-QWERTY", keyboardTypeCode: 40),
+        forWindowsGerman: UCKeyTranslateLayoutProvider(windowsLayout: .german)!
     )
 
     private static func load(_ id: String, keyboardTypeCode: UInt32) -> UCKeyTranslateLayoutProvider {

@@ -31,6 +31,22 @@ public struct WindowsKeyboardLayoutID: RawRepresentable, Hashable, Sendable, Cus
         }
     }
 
+    /// The macOS keyboard layout that types like this Windows layout (`00000407` ->
+    /// `com.apple.keylayout.German`), nil for layouts without a known Mac counterpart.
+    public var macInputSourceID: String? {
+        layoutNames.first { $0.value == rawValue }.map { "com.apple.keylayout." + $0.key }
+    }
+
+    /// The physical keyboard this layout is usually typed on: ANSI for US English layouts, JIS for
+    /// Japanese, ISO for the rest. Decides where the two keys ANSI and ISO keyboards differ in go.
+    public var typicalKeyboardType: PhysicalKeyboardType {
+        switch rawValue & 0xFFFF {
+        case 0x0409: .ansi
+        case 0x0411: .jis
+        default: .iso
+        }
+    }
+
     /// `com.apple.keylayout.German` -> `German`, `…keylayout.LogitechGerman` -> `German`.
     private static func layoutName(of inputSourceID: String) -> String {
         let name = inputSourceID.split(separator: ".").last.map(String.init) ?? inputSourceID
@@ -58,8 +74,9 @@ extension WindowsKeyboardLayoutID: Codable {
     }
 }
 
-/// macOS layout name -> KLID. Names are the last component of the input source ID.
-private let layoutsByName: [String: UInt32] = [
+/// macOS layout name -> KLID. Names are the last component of the input source ID; the first name
+/// listed for a KLID is the one `macInputSourceID` picks.
+private let layoutNames: KeyValuePairs<String, UInt32> = [
     // German-speaking (Windows has no separate Austrian layout)
     "German": 0x0407, "Austrian": 0x0407, "German-DIN-2137": 0x0407, "ABC-QWERTZ": 0x0407,
     "SwissGerman": 0x0807, "SwissFrench": 0x100C,
@@ -104,6 +121,8 @@ private let layoutsByName: [String: UInt32] = [
     "Arabic": 0x0401, "ArabicPC": 0x0401, "Persian": 0x0429,
     "Vietnamese": 0x042A, "Thai": 0x041E, "2SetHangul": 0x0412, "KANA": 0x0411,
 ]
+
+private let layoutsByName = Dictionary(layoutNames.map { ($0.key, $0.value) }, uniquingKeysWith: { first, _ in first })
 
 /// Primary language subtag -> KLID of that language's standard Windows layout.
 private let layoutsByLanguage: [String: UInt32] = [

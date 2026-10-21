@@ -112,7 +112,27 @@ public struct SecuritySettings: Codable, Hashable, Sendable {
     /// RDP authentication level: 0 = allow, 1 = require, 2 = warn; retained for .rdp round trips.
     public var authenticationLevel = 2
     public var promptForCredentials = true
+    /// Whether AI agents (MCP) may use this connection.
+    public var agentAccess = AgentAccess.ask
     public init() {}
+
+    private enum CodingKeys: String, CodingKey {
+        case ignoreCertificateErrors, trustedCertificateFingerprints, disableNLA, consoleSession
+        case authenticationLevel, promptForCredentials, agentAccess
+    }
+
+    /// Missing keys (stores written by older versions) keep their defaults; an unknown agent access
+    /// value falls back to asking.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        ignoreCertificateErrors = try container.decodeIfPresent(Bool.self, forKey: .ignoreCertificateErrors) ?? false
+        trustedCertificateFingerprints = try container.decodeIfPresent([String].self, forKey: .trustedCertificateFingerprints) ?? []
+        disableNLA = try container.decodeIfPresent(Bool.self, forKey: .disableNLA) ?? false
+        consoleSession = try container.decodeIfPresent(Bool.self, forKey: .consoleSession) ?? false
+        authenticationLevel = try container.decodeIfPresent(Int.self, forKey: .authenticationLevel) ?? 2
+        promptForCredentials = try container.decodeIfPresent(Bool.self, forKey: .promptForCredentials) ?? true
+        agentAccess = (try? container.decodeIfPresent(AgentAccess.self, forKey: .agentAccess)) ?? .ask
+    }
 
     /// Compares hex digits only, so `AA:BB…`, `aabb…` and `AA BB …` are the same fingerprint.
     public func trusts(fingerprint: String) -> Bool {
@@ -123,6 +143,11 @@ public struct SecuritySettings: Codable, Hashable, Sendable {
     public static func normalizedFingerprint(_ fingerprint: String) -> String {
         String(fingerprint.lowercased().filter(\.isHexDigit))
     }
+}
+
+/// A connection's "AI agent access" (MCP): ask in a permission prompt, always allow, or never.
+public enum AgentAccess: String, Codable, Hashable, Sendable, CaseIterable {
+    case ask, always, never
 }
 
 public struct AdvancedSettings: Codable, Hashable, Sendable {

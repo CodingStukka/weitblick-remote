@@ -156,4 +156,22 @@ struct ConnectionStoreTests {
         await #expect(throws: ConnectionStoreError.invalidConnection(invalid.id)) { try await store.insert(invalid) }
         #expect(await store.connections.isEmpty)
     }
+
+    @Test func agentAccessDefaultsToAskAndRoundTrips() async throws {
+        // Security settings written before agent access existed.
+        let old = Data(#"{"ignoreCertificateErrors":false,"trustedCertificateFingerprints":["AA:BB"],"disableNLA":true,"consoleSession":false,"authenticationLevel":0,"promptForCredentials":false}"#.utf8)
+        let decoded = try JSONDecoder().decode(SecuritySettings.self, from: old)
+        #expect(decoded.agentAccess == .ask)
+        #expect(decoded.disableNLA && decoded.authenticationLevel == 0 && !decoded.promptForCredentials)
+        #expect(decoded.trusts(fingerprint: "aabb"))
+        let unknown = Data(#"{"agentAccess":"sometimes"}"#.utf8)
+        #expect(try JSONDecoder().decode(SecuritySettings.self, from: unknown).agentAccess == .ask)
+
+        let temporary = try TemporaryDirectory()
+        var connection = Connection(name: "Lab", host: "PC0001.example")
+        connection.security.agentAccess = .never
+        try await ConnectionStore(fileURL: temporary.storeURL).insert(connection)
+        #expect(try String(contentsOf: temporary.storeURL, encoding: .utf8).contains(#""agentAccess" : "never""#))
+        #expect(try await ConnectionStore(fileURL: temporary.storeURL).load().first?.security.agentAccess == .never)
+    }
 }
