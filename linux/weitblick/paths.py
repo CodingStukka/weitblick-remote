@@ -5,7 +5,8 @@
 - ~/.local/state/weitblick-remote/agent.log  audit log of AI agent tool calls
 - $XDG_RUNTIME_DIR/weitblick-remote/mcp.sock the MCP socket (only while agent control is on)
 
-The XDG_* variables are honored, so tests can point everything at a temporary directory.
+The XDG_* variables are honored, so tests can point everything at a temporary directory. In the Flatpak
+they point into ~/.var/app/nrw.neuhaus.WeitblickRemote/, and the socket is in $XDG_RUNTIME_DIR/app/<id>/.
 """
 
 import os
@@ -19,6 +20,11 @@ def _xdg(variable: str, fallback: str) -> Path:
     value = os.environ.get(variable)
     base = Path(value) if value and os.path.isabs(value) else Path.home() / fallback
     return base / DIR_NAME
+
+
+def flatpak_id() -> str | None:
+    """The app ID when this runs as a Flatpak (the sandbox sets FLATPAK_ID), else None."""
+    return os.environ.get("FLATPAK_ID") or None
 
 
 def config_dir() -> Path:
@@ -36,7 +42,10 @@ def state_dir() -> Path:
 def runtime_dir() -> Path:
     base = os.environ.get("XDG_RUNTIME_DIR")
     if base and os.path.isdir(base):
-        return Path(base) / DIR_NAME
+        # Every `flatpak run` gets its own XDG_RUNTIME_DIR; only app/<id> in it is shared, e.g. with the
+        # MCP helper, which runs in a sandbox of its own.
+        app = flatpak_id()
+        return Path(base) / "app" / app / DIR_NAME if app else Path(base) / DIR_NAME
     return Path(f"/tmp/{DIR_NAME}-{os.getuid()}")
 
 

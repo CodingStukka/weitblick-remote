@@ -1,11 +1,13 @@
 """Remmina import."""
 
+import os
 import unittest
+from unittest import mock
 
 from weitblick.i18n import _
 from weitblick.store import (AudioPlaybackMode, ConnectionProtocol, ConnectionStore, DriveMapping, ImportAction,
                              StaleImportPlan)
-from weitblick.store.remmina import RemminaImporter, parse_server, password_notice
+from weitblick.store.remmina import RemminaImporter, default_directories, parse_server, password_notice
 
 from tests.test_store_jump import TemporaryFolder
 
@@ -146,6 +148,26 @@ class RemminaImporterTests(unittest.TestCase):
         self.assertEqual(parse_server("2001:db8::1", 3389), ("2001:db8::1", 3389))
         for bad in ("", "pc01:0", "pc01:x", "[::1", "pc 01"):
             self.assertIsNone(parse_server(bad, 3389), bad)
+
+
+class RemminaFolderTests(unittest.TestCase):
+    def setUp(self):
+        self.folder = TemporaryFolder()
+        self.addCleanup(self.folder.cleanup)
+        self.desktop = self.folder.path / "desktop-data"
+        self.sandbox = self.folder.path / "sandbox-data"
+        for base in (self.desktop, self.sandbox):
+            (base / "remmina").mkdir(parents=True)
+
+    def test_uses_the_data_folder(self):
+        with mock.patch.dict(os.environ, {"FLATPAK_ID": "", "XDG_DATA_HOME": str(self.desktop),
+                                          "HOST_XDG_DATA_HOME": str(self.sandbox)}):
+            self.assertEqual(default_directories()[0], self.desktop / "remmina")
+
+    def test_in_the_flatpak_uses_the_desktops_data_folder(self):
+        with mock.patch.dict(os.environ, {"FLATPAK_ID": "nrw.neuhaus.WeitblickRemote",
+                                          "XDG_DATA_HOME": str(self.sandbox), "HOST_XDG_DATA_HOME": str(self.desktop)}):
+            self.assertEqual(default_directories()[0], self.desktop / "remmina")
 
 
 if __name__ == "__main__":

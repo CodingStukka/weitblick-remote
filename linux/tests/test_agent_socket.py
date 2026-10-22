@@ -10,10 +10,11 @@ import threading
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from gi.repository import GLib
 
-from weitblick import paths
+from weitblick import mcp_helper, paths
 from weitblick.agent.socket_server import AgentSocketServer, SocketServerError
 
 PROJECT_ROOT = str(paths.SOURCE_ROOT)
@@ -187,6 +188,29 @@ class MCPHelperTests(unittest.TestCase):
         process = self.helper(environment)
         stdout, _stderr = process.communicate(b'{"id":1}\n', timeout=30)
         self.assertEqual(stdout, b'app:{"id":1}\n')
+
+
+class FlatpakTests(unittest.TestCase):
+    """In the Flatpak, the app and the helper run in sandboxes of their own (each `flatpak run`)."""
+
+    def test_the_socket_is_in_the_folder_the_sandboxes_share(self):
+        with tempfile.TemporaryDirectory() as runtime:
+            with mock.patch.dict(os.environ, {"XDG_RUNTIME_DIR": runtime, "FLATPAK_ID": "nrw.neuhaus.WeitblickRemote"}):
+                os.environ.pop("WEITBLICK_MCP_SOCKET", None)
+                self.assertEqual(paths.mcp_socket_path(),
+                                 Path(runtime, "app", "nrw.neuhaus.WeitblickRemote", "weitblick-remote", "mcp.sock"))
+            with mock.patch.dict(os.environ, {"XDG_RUNTIME_DIR": runtime, "FLATPAK_ID": ""}):
+                os.environ.pop("WEITBLICK_MCP_SOCKET", None)
+                self.assertEqual(paths.mcp_socket_path(), Path(runtime, "weitblick-remote", "mcp.sock"))
+
+    def test_the_helper_starts_the_app_in_a_sandbox_of_its_own(self):
+        with mock.patch.dict(os.environ, {"FLATPAK_ID": "nrw.neuhaus.WeitblickRemote"}), \
+                mock.patch.object(mcp_helper, "app_is_running", return_value=False), \
+                mock.patch.object(mcp_helper.subprocess, "Popen") as popen:
+            os.environ.pop("WEITBLICK_MCP_APP", None)
+            mcp_helper.launch_app("/run/user/1000/app/x/mcp.sock")
+        self.assertEqual(popen.call_args.args[0], ["flatpak-spawn", "--env=WEITBLICK_MCP_SOCKET=/run/user/1000/app/x/mcp.sock",
+                                                   "weitblick-remote", "--background"])
 
 
 if __name__ == "__main__":

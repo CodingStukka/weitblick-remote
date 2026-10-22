@@ -113,6 +113,18 @@ def parse_input_source(source: str) -> tuple[str, str]:
     return layout, variant
 
 
+def first_xkb_source(sources) -> tuple[str, str] | None:
+    """(layout, variant) of the first XKB entry in a list of GNOME input sources [(kind, id), …]."""
+    for kind, name in sources:
+        if kind == "xkb":
+            return parse_input_source(name)
+    return None
+
+
+# mru-sources lists the most recently used (i.e. current) source first.
+_INPUT_SOURCE_KEYS = ("mru-sources", "sources")
+
+
 def _gnome_input_source() -> tuple[str, str] | None:
     try:
         from gi.repository import Gio
@@ -120,13 +132,30 @@ def _gnome_input_source() -> tuple[str, str] | None:
         if source is None or source.lookup("org.gnome.desktop.input-sources", True) is None:
             return None
         settings = Gio.Settings.new("org.gnome.desktop.input-sources")
-        # mru-sources lists the most recently used (i.e. current) source first.
-        for key in ("mru-sources", "sources"):
-            for kind, name in settings.get_value(key).unpack():
-                if kind == "xkb":
-                    return parse_input_source(name)
+        for key in _INPUT_SOURCE_KEYS:
+            found = first_xkb_source(settings.get_value(key).unpack())
+            if found:
+                return found
     except Exception:  # noqa: BLE001 - detection is best effort
         log.debug("GNOME input sources not readable", exc_info=True)
+    return None
+
+
+def _portal_input_source() -> tuple[str, str] | None:
+    """GNOME's input sources through the settings portal: in the Flatpak, GSettings are the sandbox's own."""
+    try:
+        from gi.repository import Gio, GLib
+        bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        for key in _INPUT_SOURCE_KEYS:
+            reply = bus.call_sync("org.freedesktop.portal.Desktop", "/org/freedesktop/portal/desktop",
+                                  "org.freedesktop.portal.Settings", "Read",
+                                  GLib.Variant("(ss)", ("org.gnome.desktop.input-sources", key)),
+                                  GLib.VariantType("(v)"), Gio.DBusCallFlags.NONE, 1000, None)
+            found = first_xkb_source(reply.unpack()[0])  # unpack() unwraps Read's nested variants
+            if found:
+                return found
+    except Exception:  # noqa: BLE001 - no portal, or a desktop without GNOME's settings
+        log.debug("Input sources not readable through the settings portal", exc_info=True)
     return None
 
 
@@ -145,7 +174,7 @@ def _setxkbmap() -> tuple[str, str] | None:
 
 def current_klid() -> int:
     """The Windows layout matching the active local layout; US English if unknown."""
-    for detect in (_gnome_input_source, _setxkbmap):
+    for detect in (_gnome_input_source, _portal_input_source, _setxkbmap):
         found = detect()
         if found:
             klid = klid_for_xkb(*found)

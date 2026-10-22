@@ -13,6 +13,7 @@ import os
 import re
 from pathlib import Path
 
+from .. import paths
 from ..i18n import _
 from .connection import (AudioPlaybackMode, Connection, ConnectionProtocol, DriveMapping, ImportSource,
                          now_reference)
@@ -33,8 +34,10 @@ SCALE_DYNAMIC_RESOLUTION = 2
 
 
 def default_directories() -> list[Path]:
-    """Where Remmina keeps its files, the usual place first; only existing folders."""
-    data_home = os.environ.get("XDG_DATA_HOME")
+    """Where Remmina keeps its files, the usual place first; only existing folders. In the Flatpak,
+    XDG_DATA_HOME is this app's own folder; the desktop's is HOST_XDG_DATA_HOME (only set when the
+    desktop sets XDG_DATA_HOME) or ~/.local/share."""
+    data_home = os.environ.get("HOST_XDG_DATA_HOME" if paths.flatpak_id() else "XDG_DATA_HOME")
     base = Path(data_home) if data_home and os.path.isabs(data_home) else Path.home() / ".local/share"
     candidates = [base / "remmina", Path.home() / ".var/app/org.remmina.Remmina/data/remmina",
                   Path.home() / ".remmina"]

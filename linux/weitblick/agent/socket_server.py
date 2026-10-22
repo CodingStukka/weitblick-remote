@@ -23,10 +23,13 @@ import threading
 from pathlib import Path
 from typing import Callable
 
-from gi.repository import GLib
+import gi
 
-from .. import paths
-from .line_framer import LineFramer, LineTooLong
+gi.require_version("GLibUnix", "2.0")
+from gi.repository import GLib, GLibUnix  # noqa: E402
+
+from .. import paths  # noqa: E402
+from .line_framer import LineFramer, LineTooLong  # noqa: E402
 
 log = logging.getLogger(__name__)
 
@@ -91,8 +94,8 @@ class AgentSocketConnection:
                 on_line(line)
             return GLib.SOURCE_CONTINUE
 
-        self._watch = GLib.unix_fd_add_full(GLib.PRIORITY_DEFAULT, self._socket.fileno(),
-                                            GLib.IO_IN | GLib.IO_HUP | GLib.IO_ERR, readable)
+        self._watch = GLibUnix.fd_add_full(GLib.PRIORITY_DEFAULT, self._socket.fileno(),
+                                           GLib.IO_IN | GLib.IO_HUP | GLib.IO_ERR, readable)
 
     def send(self, line: str) -> None:
         """Sends one line (a newline is added). Thread safe; dropped once closed."""
@@ -190,8 +193,8 @@ class AgentSocketServer:
                 os.unlink(self.path)
             raise SocketServerError(f"can't listen on {self.path}: {error.strerror}") from error
         self._listener = listener
-        self._watch = GLib.unix_fd_add_full(GLib.PRIORITY_DEFAULT, listener.fileno(), GLib.IO_IN,
-                                            lambda _fd, _condition: self._accept_pending())
+        self._watch = GLibUnix.fd_add_full(GLib.PRIORITY_DEFAULT, listener.fileno(), GLib.IO_IN,
+                                           lambda _fd, _condition: self._accept_pending())
         log.info("MCP socket listening at %s", self.path)
 
     def stop(self) -> None:

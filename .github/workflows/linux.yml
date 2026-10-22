@@ -1,7 +1,8 @@
-# The Linux version (linux/): builds, tests and packages it on every change that touches it, installs the
-# package on a clean Ubuntu, and attaches the packages to a published release, next to the DMG and ZIP from
-# scripts/release.sh. Asset names carry no version, like the macOS ones: the README links to
-# releases/latest/download/Weitblick-Remote-<arch>.deb.
+# The Linux version (linux/): builds, tests and packages it on every change that touches it, as Debian packages
+# (installed on a clean Ubuntu) and as Flatpak bundles (built against the GNOME runtime, installed in its CI
+# image), and attaches them to a published release, next to the DMG and ZIP from scripts/release.sh. Asset
+# names carry no version, like the macOS ones: the README links to
+# releases/latest/download/Weitblick-Remote-<arch>.deb and Weitblick-Remote-<arch>.flatpak.
 name: Linux
 
 on:
@@ -63,18 +64,53 @@ jobs:
           path: Weitblick-Remote-${{ matrix.arch }}.deb
           if-no-files-found: error
 
+  flatpak:
+    name: Flatpak (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v7
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          manifest-path: linux/flatpak/nrw.neuhaus.WeitblickRemote.yml
+          bundle: Weitblick-Remote-${{ matrix.arch }}.flatpak
+          arch: ${{ matrix.arch }}
+          # Inside linux/build, which the manifest leaves out of the app's sources.
+          build-dir: linux/build/flatpak/app
+          repo-dir: linux/build/flatpak/repo
+          state-dir: linux/build/flatpak/state
+          upload-artifact: false
+      - name: Install the bundle and start the app
+        run: linux/scripts/test-flatpak.sh Weitblick-Remote-${{ matrix.arch }}.flatpak
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Weitblick-Remote-${{ matrix.arch }}.flatpak
+          path: Weitblick-Remote-${{ matrix.arch }}.flatpak
+          if-no-files-found: error
+
   release:
     name: Attach to the release
     if: github.event_name == 'release'
-    needs: build
+    needs: [build, flatpak]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
       - uses: actions/download-artifact@v8
         with:
-          pattern: Weitblick-Remote-*.deb
+          pattern: Weitblick-Remote-*
           merge-multiple: true
+      # The Flatpaks come from the same commit; a unit test keeps their AppStream version at VERSION.
       - name: Check the version
         env:
           TAG: ${{ github.event.release.tag_name }}
@@ -88,5 +124,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name }}
         run: |
-          sha256sum Weitblick-Remote-*.deb > SHA256SUMS-Linux.txt
-          gh release upload "$TAG" Weitblick-Remote-*.deb SHA256SUMS-Linux.txt --clobber --repo "$GITHUB_REPOSITORY"
+          sha256sum Weitblick-Remote-*.deb Weitblick-Remote-*.flatpak > SHA256SUMS-Linux.txt
+          gh release upload "$TAG" Weitblick-Remote-*.deb Weitblick-Remote-*.flatpak SHA256SUMS-Linux.txt --clobber \
+            --repo "$GITHUB_REPOSITORY"

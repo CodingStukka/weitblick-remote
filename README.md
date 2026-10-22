@@ -145,13 +145,15 @@ PC; read-only shared folders are not supported; Apple Silicon only. VNC entries 
 
 ## Linux
 
-A Linux version for Ubuntu 24.04 and newer lives in [linux/](linux/README.md): GTK 4 and libadwaita on the same C
-bridge to FreeRDP, the same `connections.json`, keyboard handling for Windows, clipboard with files, imports
-(Remmina, Jump Desktop, `.rdp`) and AI agents. Every release carries `Weitblick-Remote-amd64.deb` and
-`Weitblick-Remote-arm64.deb`:
+A Linux version lives in [linux/](linux/README.md): GTK 4 and libadwaita on the same C bridge to FreeRDP, the same
+`connections.json`, keyboard handling for Windows, clipboard with files, imports (Remmina, Jump Desktop, `.rdp`) and
+AI agents. Every release carries Debian packages for Ubuntu 24.04 and newer (`Weitblick-Remote-amd64.deb`,
+`Weitblick-Remote-arm64.deb`) and Flatpak bundles for other distributions (`Weitblick-Remote-x86_64.flatpak`,
+`Weitblick-Remote-aarch64.flatpak`):
 
 ```sh
 sudo apt install ./Weitblick-Remote-amd64.deb
+flatpak install --user ./Weitblick-Remote-x86_64.flatpak
 ```
 
 ## Building from source

@@ -6,7 +6,8 @@
 #   DESTDIR=staging scripts/install.sh /usr  for a package (files under staging/usr, paths for /usr)
 #
 # Layout: PREFIX/lib/weitblick-remote/weitblick/ (the Python package with lib/, data/ and locale/),
-# PREFIX/bin/weitblick-remote and weitblick-mcp, the desktop file, icons and the .rdp MIME type.
+# PREFIX/bin/weitblick-remote and weitblick-mcp, the desktop file, AppStream metadata, icons and the .rdp MIME
+# type. Files outside lib/ and bin/ are named after the app ID, as Flatpak needs for exporting them.
 set -eu
 here=$(cd "$(dirname "$0")/.." && pwd)
 uninstall=false
@@ -29,6 +30,7 @@ refresh() {
 if $uninstall; then
     rm -rf "$dest$libdir"
     rm -f "$bindir/weitblick-remote" "$bindir/weitblick-mcp" "$share/applications/$app_id.desktop" \
+        "$share/metainfo/$app_id.metainfo.xml" "$share/mime/packages/$app_id.xml" \
         "$share/mime/packages/weitblick-remote.xml"
     find "$share/icons/hicolor" -name "$app_id.*" -delete 2>/dev/null || true
     refresh
@@ -40,7 +42,7 @@ fi
 
 target=$dest$libdir
 rm -rf "$target"
-mkdir -p "$target" "$bindir" "$share/applications" "$share/mime/packages"
+mkdir -p "$target" "$bindir" "$share/applications" "$share/metainfo" "$share/mime/packages"
 # The package without caches, plus the bridge, data and translations inside it.
 (cd "$here" && find weitblick -name '__pycache__' -prune -o -type f -name '*.py' -print) | while read -r file; do
     mkdir -p "$target/$(dirname "$file")"
@@ -63,7 +65,8 @@ LAUNCHER
 done
 
 sed "s|@BINDIR@|$prefix/bin|" "$here/data/$app_id.desktop.in" > "$share/applications/$app_id.desktop"
-cp "$here/data/weitblick-remote-mime.xml" "$share/mime/packages/weitblick-remote.xml"
+cp "$here/data/$app_id.metainfo.xml" "$share/metainfo/"
+cp "$here/data/weitblick-remote-mime.xml" "$share/mime/packages/$app_id.xml"
 (cd "$here/build/icons" && find hicolor -type f -name "$app_id.*") | while read -r icon; do
     mkdir -p "$share/icons/$(dirname "$icon")"
     cp "$here/build/icons/$icon" "$share/icons/$icon"

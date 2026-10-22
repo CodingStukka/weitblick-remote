@@ -13,9 +13,11 @@
 <p align="center">
   <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-amd64.deb"><strong>Download (.deb, amd64)</strong></a> ·
   <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-arm64.deb">arm64</a> ·
+  <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-x86_64.flatpak"><strong>Flatpak (x86_64)</strong></a> ·
+  <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-aarch64.flatpak">aarch64</a> ·
   <a href="https://github.com/mneuhaus/weitblick-remote/releases">All releases</a>
   <br>
-  <sub>Ubuntu 24.04 or later · English and German interface · Apache-2.0</sub>
+  <sub>Ubuntu 24.04 or later (.deb), any distribution with Flatpak · English and German interface · Apache-2.0</sub>
 </p>
 
 <p align="center">
@@ -86,6 +88,18 @@ and install it; apt pulls in GTK 4, libadwaita and FreeRDP 3 from the distributi
 sudo apt install ./Weitblick-Remote-amd64.deb
 ```
 
+Any other distribution: install the Flatpak bundle (`Weitblick-Remote-x86_64.flatpak` or
+`Weitblick-Remote-aarch64.flatpak`); Flatpak fetches the GNOME runtime from Flathub if it isn't there yet:
+
+```sh
+flatpak install --user ./Weitblick-Remote-x86_64.flatpak
+```
+
+The Flatpak brings its own FreeRDP (the macOS app's version) and Tesseract (English and German). It may use the
+network, sound, printers and your home folder (shared folders, files on the clipboard, the Remmina import). It keeps
+its connections, settings and passwords apart from a `.deb` installation (see [Files](#files)). A bundle doesn't
+update itself: install the next release's bundle over it.
+
 From source:
 
 ```sh
@@ -101,7 +115,8 @@ Without root you can skip the two `-dev` packages: `make headers` downloads them
 the headers into `build/sysroot`. The app needs GTK 4.14, libadwaita 1.5 and FreeRDP 3 as in Ubuntu 24.04 (with updates) or newer. `make uninstall`
 removes it again; `make deb` builds the package into `build/deb/`.
 
-Optional: `sudo apt install tesseract-ocr tesseract-ocr-deu` for the agents' `read_screen` and `find_text`.
+Optional: `sudo apt install tesseract-ocr tesseract-ocr-deu` for the agents' `read_screen` and `find_text` (the
+Flatpak has it built in).
 
 ## Use with AI agents (MCP)
 
@@ -109,11 +124,12 @@ Optional: `sudo apt install tesseract-ocr tesseract-ocr-deu` for the agents' `re
 2. Add the server to your agent. For Claude Code:
 
    ```sh
-   claude mcp add weitblick -- ~/.local/bin/weitblick-mcp
+   claude mcp add weitblick -- weitblick-mcp
+   claude mcp add weitblick -- flatpak run --command=weitblick-mcp nrw.neuhaus.WeitblickRemote   # the Flatpak
    ```
 
-   `weitblick-mcp` talks to the app over a socket only your user can open
-   (`$XDG_RUNTIME_DIR/weitblick-remote/mcp.sock`) and starts the app in the background if it isn't running.
+   Settings → AI Agents shows the line for your installation. `weitblick-mcp` talks to the app over a socket only
+   your user can open (see [Files](#files)) and starts the app in the background if it isn't running.
 
 Each connection has **AI agent access** (Edit… → Security): **Ask** (the default), **Always allow** or **Never**. Ask
 shows a small prompt naming the agent and the PC: **Deny**, **Allow once**, **Allow for 10 minutes**, **Allow today** or
@@ -137,6 +153,10 @@ Tools: `list_connections`, `list_sessions`, `connect`, `disconnect`, `screenshot
 | Agent audit log | `~/.local/state/weitblick-remote/agent.log` |
 | MCP socket | `$XDG_RUNTIME_DIR/weitblick-remote/mcp.sock` |
 
+The Flatpak keeps `~/.config`, `~/.local/share` and `~/.local/state` in `~/.var/app/nrw.neuhaus.WeitblickRemote/`
+(`config/`, `data/`, `.local/state/`), its passwords in the keyring through the desktop's secret portal, and its
+socket in `$XDG_RUNTIME_DIR/app/nrw.neuhaus.WeitblickRemote/weitblick-remote/mcp.sock`.
+
 No telemetry, no analytics, no account, no cloud.
 
 ## Development
@@ -145,6 +165,7 @@ No telemetry, no analytics, no account, no cloud.
 make            # the bridge (build/libweitblick-bridge.so), the icons and the German translation
 make test       # unit tests (no display needed)
 make deb        # the Debian package (build/deb/)
+make flatpak    # the Flatpak bundle (build/flatpak/; needs flatpak-builder, fetches the GNOME SDK from Flathub)
 make run        # the app from the source tree
 scripts/dev-test-server.sh     # a local RDP server on 127.0.0.1:33890 (FreeRDP shadow on a private Xvfb)
 scripts/update-po.py           # refresh po/weitblick-remote.pot and po/de.po after string changes

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata for software centers (the Flatpak and the Debian package). -->
+<component type="desktop-application">
+  <id>nrw.neuhaus.WeitblickRemote</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <name>Weitblick Remote</name>
+  <summary>Connect to Windows PCs over RDP</summary>
+  <summary xml:lang="de">Mit Windows-PCs über RDP verbinden</summary>
+  <developer id="nrw.neuhaus">
+    <name>Marc Neuhaus</name>
+  </developer>
+  <description>
+    <p>
+      Weitblick Remote connects to Windows PCs over the Remote Desktop Protocol. It is the Linux version of the macOS
+      app of the same name, built on FreeRDP 3, GTK 4 and libadwaita.
+    </p>
+    <p xml:lang="de">
+      Weitblick Remote verbindet sich über das Remote Desktop Protocol mit Windows-PCs. Es ist die Linux-Version der
+      gleichnamigen macOS-App, gebaut auf FreeRDP 3, GTK 4 und libadwaita.
+    </p>
+    <ul>
+      <li>An overview of your connections and one tab per session</li>
+      <li>Keys go to Windows as scancodes, with the Windows layout matching yours</li>
+      <li>Clipboard in both directions: text, images, files and folders</li>
+      <li>Shared folders, sound, microphone and printers</li>
+      <li>Reconnects to the same Windows session after a network drop</li>
+      <li>Imports from Remmina, Jump Desktop and .rdp files</li>
+      <li>AI agents such as Claude Code can use your connections over MCP, after you allow it</li>
+    </ul>
+    <ul xml:lang="de">
+      <li>Übersicht über deine Verbindungen und ein Tab pro Sitzung</li>
+      <li>Tasten gehen als Scancodes an Windows, mit dem passenden Windows-Layout</li>
+      <li>Zwischenablage in beide Richtungen: Text, Bilder, Dateien und Ordner</li>
+      <li>Geteilte Ordner, Ton, Mikrofon und Drucker</li>
+      <li>Verbindet sich nach einem Netzwerkabbruch wieder mit derselben Windows-Sitzung</li>
+      <li>Import aus Remmina, Jump Desktop und .rdp-Dateien</li>
+      <li>KI-Agenten wie Claude Code können deine Verbindungen über MCP nutzen, wenn du es erlaubst</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">nrw.neuhaus.WeitblickRemote.desktop</launchable>
+  <url type="homepage">https://mneuhaus.github.io/weitblick-remote/</url>
+  <url type="bugtracker">https://github.com/mneuhaus/weitblick-remote/issues</url>
+  <url type="vcs-browser">https://github.com/mneuhaus/weitblick-remote</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Connections with their status and last use</caption>
+      <image>https://raw.githubusercontent.com/mneuhaus/weitblick-remote/main/linux/docs/screenshots/overview.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>A Windows session in a tab</caption>
+      <image>https://raw.githubusercontent.com/mneuhaus/weitblick-remote/main/linux/docs/screenshots/session.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Importing connections from Remmina</caption>
+      <image>https://raw.githubusercontent.com/mneuhaus/weitblick-remote/main/linux/docs/screenshots/import.png</image>
+    </screenshot>
+  </screenshots>
+  <provides>
+    <binary>weitblick-remote</binary>
+    <binary>weitblick-mcp</binary>
+    <mediatype>application/x-rdp</mediatype>
+  </provides>
+  <requires>
+    <display_length compare="ge">720</display_length>
+  </requires>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </supports>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.1.0" date="2026-10-21"/>
+  </releases>
+</component>

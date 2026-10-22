@@ -9,8 +9,9 @@ from dataclasses import dataclass
 
 import gi
 
+gi.require_version("Gdk", "4.0")
 gi.require_version("GdkPixbuf", "2.0")
-from gi.repository import GdkPixbuf, GLib  # noqa: E402
+from gi.repository import Gdk, GdkPixbuf, GLib  # noqa: E402
 
 from .screen_mapping import DesktopRect  # noqa: E402
 
@@ -88,11 +89,20 @@ def resized(image: GdkPixbuf.Pixbuf, width: int, height: int) -> GdkPixbuf.Pixbu
     return image.scale_simple(width, height, GdkPixbuf.InterpType.HYPER if smaller else GdkPixbuf.InterpType.BILINEAR)
 
 
+def png(image: GdkPixbuf.Pixbuf) -> bytes:
+    """PNG from GTK's own encoder. GdkPixbuf's encoders run in a separate sandboxed process since GNOME 49
+    (glycin), one per image."""
+    memory_format = Gdk.MemoryFormat.R8G8B8A8 if image.get_has_alpha() else Gdk.MemoryFormat.R8G8B8
+    texture = Gdk.MemoryTexture.new(image.get_width(), image.get_height(), memory_format, image.read_pixel_bytes(),
+                                    image.get_rowstride())
+    return texture.save_to_png_bytes().get_data()
+
+
 def encode(image: GdkPixbuf.Pixbuf, png_limit: int = PNG_LIMIT) -> tuple[bytes, str]:
     """PNG, or JPEG when the PNG would be larger than `png_limit` (photos, busy wallpapers)."""
-    ok, png = image.save_to_bufferv("png", [], [])
-    if ok and len(png) <= png_limit:
-        return bytes(png), "image/png"
+    data = png(image)
+    if len(data) <= png_limit:
+        return data, "image/png"
     ok, jpeg = image.save_to_bufferv("jpeg", ["quality"], [str(JPEG_QUALITY)])
     if not ok:
         raise RuntimeError("the screenshot couldn't be encoded")
@@ -109,7 +119,4 @@ def ocr_png(pixels: DesktopPixels, factor: int) -> bytes:
     image = pixbuf(pixels)
     if factor != 1:
         image = resized(image, image.get_width() * factor, image.get_height() * factor)
-    ok, png = image.save_to_bufferv("png", [], [])
-    if not ok:
-        raise RuntimeError("the image for text recognition couldn't be encoded")
-    return bytes(png)
+    return png(image)

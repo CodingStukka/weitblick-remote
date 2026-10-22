@@ -76,6 +76,9 @@ class LayoutTests(unittest.TestCase):
     def test_gnome_input_source(self):
         self.assertEqual(layouts.parse_input_source("de+mac_nodeadkeys"), ("de", "mac_nodeadkeys"))
         self.assertEqual(layouts.parse_input_source("us"), ("us", ""))
+        self.assertEqual(layouts.first_xkb_source([("ibus", "anthy"), ("xkb", "de+nodeadkeys"), ("xkb", "us")]),
+                         ("de", "nodeadkeys"))
+        self.assertIsNone(layouts.first_xkb_source([]))
 
     def test_known_layouts_are_unique(self):
         ids = [layout.klid for layout in layouts.known_layouts()]

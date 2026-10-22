@@ -4,6 +4,7 @@ app in the background when it isn't running. All MCP logic lives in the app. Por
 Sources/WeitblickMCP/main.swift.
 
     claude mcp add weitblick -- weitblick-mcp
+    claude mcp add weitblick -- flatpak run --command=weitblick-mcp nrw.neuhaus.WeitblickRemote
     claude mcp add weitblick -- python3 -m weitblick.mcp_helper      # from a source checkout
 
     weitblick-mcp [--socket <path>]
@@ -114,11 +115,15 @@ def launch_app(path: str) -> Callable[[], bool] | None:
         if app_is_running():
             # Running without the socket: never start it again (that would show its window).
             return app_is_running
-        command = [sys.executable, "-m", "weitblick", "--background"]
-        # The package must be importable from wherever the client started this helper.
-        package_root = str(Path(__file__).resolve().parent.parent)
-        environment["PYTHONPATH"] = os.pathsep.join(
-            [package_root] + [p for p in environment.get("PYTHONPATH", "").split(os.pathsep) if p])
+        if paths.flatpak_id():
+            # A sandbox of its own through the Flatpak portal: a child of this one would end with the helper.
+            command = ["flatpak-spawn", f"--env=WEITBLICK_MCP_SOCKET={path}", "weitblick-remote", "--background"]
+        else:
+            command = [sys.executable, "-m", "weitblick", "--background"]
+            # The package must be importable from wherever the client started this helper.
+            package_root = str(Path(__file__).resolve().parent.parent)
+            environment["PYTHONPATH"] = os.pathsep.join(
+                [package_root] + [p for p in environment.get("PYTHONPATH", "").split(os.pathsep) if p])
     try:
         process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL, start_new_session=True, env=environment,

@@ -24,8 +24,12 @@ from .access_gate import AccessGrant, AccessPrompt, PromptAnswer  # noqa: E402
 
 def setup_command(which: Callable[[str], str | None] = shutil.which, home: Path | None = None,
                   executable: str | None = None, source_root: Path | None = None) -> str:
-    """The `claude mcp add` line for this copy of the app: the installed weitblick-mcp launcher, or the
-    helper module of this source checkout (with PYTHONPATH, since Claude Code starts it anywhere)."""
+    """The `claude mcp add` line for this copy of the app: the installed weitblick-mcp launcher (in the
+    Flatpak through `flatpak run`), or the helper module of this source checkout (with PYTHONPATH, since
+    Claude Code starts it anywhere)."""
+    app_id = paths.flatpak_id()
+    if app_id:
+        return f"claude mcp add weitblick -- flatpak run --command=weitblick-mcp {app_id}"
     launcher = which("weitblick-mcp")
     if launcher is None:
         local = (home or Path.home()) / ".local" / "bin" / "weitblick-mcp"

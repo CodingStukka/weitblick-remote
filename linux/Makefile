@@ -5,6 +5,7 @@
 #   make run        starts the app from the source tree
 #   make install    installs into ~/.local (PREFIX=/usr/local for a system install, needs root)
 #   make deb        builds the Debian package into build/deb/
+#   make flatpak    builds the Flatpak bundle into build/flatpak/ (flatpak-builder; fetches the GNOME SDK)
 #
 # The C bridge and the app icon are the macOS app's: ../Sources/WeitblickBridge and ../design/icon.
 # Build dependencies: a C compiler and the FreeRDP 3 headers (sudo apt install freerdp3-dev libwinpr3-dev).
@@ -40,7 +41,7 @@ BRIDGE_LIB := $(BUILD)/libweitblick-bridge.so
 MO_FILES   := $(patsubst po/%.po,$(BUILD)/locale/%/LC_MESSAGES/weitblick-remote.mo,$(wildcard po/*.po))
 ICONS      := $(BUILD)/icons/hicolor
 
-.PHONY: all headers test run install uninstall deb clean
+.PHONY: all headers test run install uninstall deb flatpak clean
 
 all: $(BRIDGE_LIB) $(BUILD)/icons.stamp $(MO_FILES)
 
@@ -87,5 +88,12 @@ uninstall:
 deb: all
 	scripts/build-deb.sh
 
+# Builds from this checkout (the manifest's sources are ../.. and skip build/).
+flatpak:
+	flatpak-builder --user --install-deps-from=flathub --force-clean --state-dir=$(BUILD)/flatpak/state \
+		--repo=$(BUILD)/flatpak/repo $(BUILD)/flatpak/app flatpak/$(APP_ID).yml
+	flatpak build-bundle $(BUILD)/flatpak/repo $(BUILD)/flatpak/Weitblick-Remote.flatpak $(APP_ID) \
+		--runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
+
 clean:
-	rm -rf $(BUILD)/obj $(BRIDGE_LIB) $(BUILD)/locale $(BUILD)/icons $(BUILD)/icons.stamp $(BUILD)/deb
+	rm -rf $(BUILD)/obj $(BRIDGE_LIB) $(BUILD)/locale $(BUILD)/icons $(BUILD)/icons.stamp $(BUILD)/deb $(BUILD)/flatpak

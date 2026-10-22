@@ -3,12 +3,13 @@
 import os
 import tempfile
 import unittest
+from unittest import mock
 from dataclasses import dataclass, field
 
 import gi
 
-gi.require_version("GdkPixbuf", "2.0")
-from gi.repository import GdkPixbuf, GLib  # noqa: E402
+gi.require_version("Gdk", "4.0")
+from gi.repository import Gdk, GLib  # noqa: E402
 
 from weitblick.agent import loop, screen_capture, tools  # noqa: E402
 from weitblick.agent.screen_mapping import DesktopRect, PixelRect, ScreenMapping  # noqa: E402
@@ -106,20 +107,15 @@ class ScreenCaptureTests(unittest.TestCase):
         pixels = screen_capture.crop(frame(64, 32))
         data, mime = screen_capture.screenshot(pixels, 32, 16)
         self.assertEqual(mime, "image/png")
-        loader = GdkPixbuf.PixbufLoader()
-        loader.write(data)
-        loader.close()
-        self.assertEqual((loader.get_pixbuf().get_width(), loader.get_pixbuf().get_height()), (32, 16))
+        texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+        self.assertEqual((texture.get_width(), texture.get_height()), (32, 16))
         data, mime = screen_capture.encode(screen_capture.pixbuf(pixels), png_limit=10)
         self.assertEqual(mime, "image/jpeg")
         self.assertTrue(data.startswith(b"\xff\xd8"))
 
     def test_ocr_png_is_upscaled(self):
         png = screen_capture.ocr_png(screen_capture.crop(frame(20, 10)), 2)
-        loader = GdkPixbuf.PixbufLoader()
-        loader.write(png)
-        loader.close()
-        self.assertEqual(loader.get_pixbuf().get_width(), 40)
+        self.assertEqual(Gdk.Texture.new_from_bytes(GLib.Bytes.new(png)).get_width(), 40)
 
 
 class HelperTests(unittest.TestCase):
@@ -143,6 +139,7 @@ class HelperTests(unittest.TestCase):
         self.assertEqual(tools.status_name(SessionStatus("reconnecting", 2)), "reconnecting (attempt 2)")
         self.assertEqual(tools.status_name(CONNECTED), "connected")
 
+    @mock.patch.dict(os.environ, {"FLATPAK_ID": ""})
     def test_setup_command(self):
         self.assertEqual(setup_command(which=lambda _n: "/opt/bin/weitblick-mcp"),
                          "claude mcp add weitblick -- /opt/bin/weitblick-mcp")
@@ -155,6 +152,11 @@ class HelperTests(unittest.TestCase):
                                     executable="/usr/bin/python3", source_root=__import__("pathlib").Path("/src/wb"))
         self.assertEqual(command, "claude mcp add weitblick -e PYTHONPATH=/src/wb -- /usr/bin/python3 -m "
                                   "weitblick.mcp_helper")
+
+    @mock.patch.dict(os.environ, {"FLATPAK_ID": "nrw.neuhaus.WeitblickRemote"})
+    def test_setup_command_in_the_flatpak(self):
+        self.assertEqual(setup_command(which=lambda _n: "/app/bin/weitblick-mcp"),
+                         "claude mcp add weitblick -- flatpak run --command=weitblick-mcp nrw.neuhaus.WeitblickRemote")
 
 
 # MARK: - Tool calls against fakes
