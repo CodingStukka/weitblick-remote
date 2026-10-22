@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Weitblick Remote – free, native Remote Desktop client for Mac</title>
-  <meta name="description" content="Weitblick Remote is a free, open-source RDP client for macOS. Mac shortcuts translated like Jump Desktop, clipboard with images and files, native tabs, Jump Desktop import. Apple Silicon, macOS 14+.">
+  <meta name="description" content="Weitblick Remote is a free, open-source RDP client for macOS. Mac shortcuts translated like Jump Desktop, clipboard with images and files, native tabs, Jump Desktop import. Apple Silicon, macOS 14+. Also for Linux (.deb and Flatpak).">
   <link rel="canonical" href="https://mneuhaus.github.io/weitblick-remote/">
   <meta name="theme-color" content="#f6faf9" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#071824" media="(prefers-color-scheme: dark)">
@@ -35,6 +35,7 @@
       <a href="#agents">AI agents</a>
       <a href="#screenshots">Screenshots</a>
       <a href="#install">Install</a>
+      <a href="#linux">Linux</a>
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-tools">
@@ -58,6 +59,7 @@
       </a>
       <div class="links-secondary">
         <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote.zip">ZIP</a>
+        <a href="#linux">Linux</a>
         <a href="https://github.com/mneuhaus/weitblick-remote">GitHub</a>
         <a href="https://github.com/mneuhaus/weitblick-remote/releases">All releases</a>
       </div>
@@ -373,7 +375,48 @@
   </div>
 </section>
 
-<section id="faq" aria-labelledby="faq-title">
+<section id="linux" aria-labelledby="linux-title">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Linux</span>
+      <h2 id="linux-title">Also on Linux</h2>
+      <p>The Linux version builds the same C bridge to FreeRDP, with GTK 4 and libadwaita on top: the same connections file as on the Mac, keyboard handling for Windows, the clipboard with files, imports from Remmina, Jump Desktop and .rdp files, and AI agents. English and German interface.</p>
+    </div>
+    <div class="split downloads">
+      <div class="card">
+        <h3>Ubuntu and its relatives (.deb)</h3>
+        <p>Ubuntu 24.04 or later, Zorin OS 18, Linux Mint 22, Pop!_OS 24.04. apt installs GTK 4, libadwaita and FreeRDP 3 from the distribution.</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-amd64.deb">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+            Download <small>.deb · amd64</small>
+          </a>
+          <div class="links-secondary">
+            <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-arm64.deb">arm64</a>
+          </div>
+        </div>
+        <div class="terminal"><pre><code>sudo apt install ./Weitblick-Remote-amd64.deb</code></pre></div>
+      </div>
+      <div class="card">
+        <h3>Any other distribution (Flatpak)</h3>
+        <p>Fedora, Arch, openSUSE and others. The Flatpak brings its own FreeRDP and text recognition; Flatpak fetches the GNOME runtime from Flathub when you install it.</p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-x86_64.flatpak">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+            Download <small>Flatpak · x86_64</small>
+          </a>
+          <div class="links-secondary">
+            <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote-aarch64.flatpak">aarch64</a>
+          </div>
+        </div>
+        <div class="terminal"><pre><code>flatpak install --user ./Weitblick-Remote-x86_64.flatpak</code></pre></div>
+      </div>
+    </div>
+    <p style="margin-top:24px;color:var(--text-2)">Building from source, the AI agent setup and where the files live: <a href="https://github.com/mneuhaus/weitblick-remote/blob/main/linux/README.md">linux/README.md</a>.</p>
+  </div>
+</section>
+
+<section id="faq" class="alt" aria-labelledby="faq-title">
   <div class="wrap">
     <div class="section-head center">
       <span class="eyebrow">FAQ</span>
@@ -433,7 +476,7 @@
   </div>
 </section>
 
-<section id="source" class="alt" aria-labelledby="source-title">
+<section id="source" aria-labelledby="source-title">
   <div class="wrap split">
     <div>
       <span class="eyebrow">Building from source</span>

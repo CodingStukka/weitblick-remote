@@ -311,6 +311,11 @@ kbd {
 }
 .copy:hover { background: rgba(255, 255, 255, 0.16); }
 .permissions { margin: 0; padding-left: 1.1em; color: var(--text-2); font-size: 0.95rem; }
+/* Linux downloads: two cards side by side, buttons inside */
+.split.downloads { align-items: stretch; }
+.split.downloads > .card { display: flex; flex-direction: column; }
+.split.downloads > .card + .card { margin-top: 0; }
+.split.downloads .cta { justify-content: flex-start; margin: auto 0 2px; padding-top: 18px; }
 .permissions li + li { margin-top: 6px; }
 
 /* FAQ */
