@@ -1,5 +1,5 @@
 // Clipboard redirection (MS-RDPECLIP) over FreeRDP's cliprdr channel. The bridge only moves
-// format lists and data blobs; formats and conversions live in Swift.
+// format lists and data blobs; formats and conversions live in the app (Swift; Python on Linux).
 //
 // Server messages arrive on the channel's message thread. The API functions may be called from
 // any thread: they only queue PDUs, which the session's event loop sends.
@@ -39,7 +39,7 @@ static UINT on_monitor_ready(CliprdrClientContext *cliprdr, const CLIPRDR_MONITO
     const UINT rc = send_client_capabilities(cliprdr);
     if (rc != CHANNEL_RC_OK)
         return rc;
-    // The client must answer with its format list; Swift announces the local clipboard.
+    // The client must answer with its format list; the app announces the local clipboard.
     if (session->callbacks.clipboardReady)
         session->callbacks.clipboardReady(session->callbacks.userData);
     return CHANNEL_RC_OK;

@@ -7,6 +7,15 @@
 
 #define TLS_VERSION_1_0 0x0301 // OpenSSL's TLS1_VERSION
 
+// The client OS the server sees: the macOS app or the Linux port (linux/), which builds this bridge too.
+#ifdef __APPLE__
+#define WB_OS_MAJOR_TYPE OSMAJORTYPE_MACINTOSH
+#define WB_OS_MINOR_TYPE OSMINORTYPE_MACINTOSH
+#else
+#define WB_OS_MAJOR_TYPE OSMAJORTYPE_UNIX
+#define WB_OS_MINOR_TYPE OSMINORTYPE_NATIVE_XSERVER
+#endif
+
 // Old Windows (7 without updates, Embedded/IoT) speak only TLS 1.0 with SHA-1, which OpenSSL 3
 // refuses unless the minimum version and the security level allow it. The client still offers its
 // best version, the handshake's Finished messages protect that choice against tampering, and
@@ -70,6 +79,6 @@ bool wb_settings_apply(rdpSettings *s, const WBSessionConfig *c) {
            freerdp_settings_set_bool(s, FreeRDP_SupportDisplayControl, TRUE) &&
            freerdp_settings_set_bool(s, FreeRDP_DynamicResolutionUpdate, TRUE) &&
            freerdp_set_connection_type(s, CONNECTION_TYPE_AUTODETECT) &&
-           freerdp_settings_set_uint32(s, FreeRDP_OsMajorType, OSMAJORTYPE_MACINTOSH) &&
-           freerdp_settings_set_uint32(s, FreeRDP_OsMinorType, OSMINORTYPE_MACINTOSH);
+           freerdp_settings_set_uint32(s, FreeRDP_OsMajorType, WB_OS_MAJOR_TYPE) &&
+           freerdp_settings_set_uint32(s, FreeRDP_OsMinorType, WB_OS_MINOR_TYPE);
 }

@@ -25,7 +25,7 @@ static bool apply_drives(rdpSettings *settings, const WBDrive *drives, size_t co
 bool wb_redirection_apply(rdpSettings *settings, const WBSessionConfig *config) {
     if (!apply_audio(settings, config->audio) || !apply_drives(settings, config->drives, config->driveCount))
         return false;
-    // The printer channel enumerates the Mac's CUPS printers when it loads.
+    // The printer channel enumerates the local CUPS printers when it loads.
     return freerdp_settings_set_bool(settings, FreeRDP_RedirectPrinters, config->printers) &&
            freerdp_settings_set_bool(settings, FreeRDP_AudioCapture, config->microphone);
 }

@@ -18,7 +18,7 @@ extern "C" {
 typedef struct WBSession WBSession;
 
 typedef enum {
-    WBAudioLocal = 0,  ///< played on the Mac (rdpsnd, macOS backend)
+    WBAudioLocal = 0,  ///< played on this computer (rdpsnd; macOS or PulseAudio/ALSA backend)
     WBAudioRemote = 1, ///< left on the remote computer
     WBAudioOff = 2,
 } WBAudioMode;
@@ -56,9 +56,9 @@ typedef struct {
     /// Load-balancer routing token (.rdp "loadbalanceinfo"); NULL or "" for none.
     const char *loadBalanceInfo;
     WBAudioMode audio;
-    /// Microphone redirection (audin, macOS backend).
+    /// Microphone redirection (audin; macOS or PulseAudio/ALSA backend).
     bool microphone;
-    /// Printer redirection (CUPS printers of the Mac).
+    /// Printer redirection (the local CUPS printers).
     bool printers;
     /// Drive redirection; strings are copied.
     const WBDrive *drives;
