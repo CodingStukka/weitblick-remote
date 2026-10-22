@@ -13,7 +13,8 @@
   <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote.dmg"><strong>Download (DMG)</strong></a> ·
   <a href="https://github.com/mneuhaus/weitblick-remote/releases/latest/download/Weitblick-Remote.zip">ZIP</a> ·
   <a href="https://github.com/mneuhaus/weitblick-remote/releases">All releases</a> ·
-  <a href="https://mneuhaus.github.io/weitblick-remote/">Website</a>
+  <a href="https://mneuhaus.github.io/weitblick-remote/">Website</a> ·
+  <a href="linux/README.md">Linux version</a>
   <br>
   <sub>macOS 14 Sonoma or later · Apple Silicon · English and German interface · Apache-2.0</sub>
 </p>
@@ -141,6 +142,17 @@ Mac only, not synced). AI agents can only reach the app when you turn them on, a
 No RD Gateway, multi-monitor or H.264 yet; sign-in with user name and password only (no Kerberos, smart cards or
 Entra ID); files via copy and paste, not drag and drop; Mac printers need the “Microsoft Print to PDF” driver on the
 PC; read-only shared folders are not supported; Apple Silicon only. VNC entries open macOS Screen Sharing.
+
+## Linux
+
+A Linux version for Ubuntu 24.04 and newer lives in [linux/](linux/README.md): GTK 4 and libadwaita on the same C
+bridge to FreeRDP, the same `connections.json`, keyboard handling for Windows, clipboard with files, imports
+(Remmina, Jump Desktop, `.rdp`) and AI agents. Every release carries `Weitblick-Remote-amd64.deb` and
+`Weitblick-Remote-arm64.deb`:
+
+```sh
+sudo apt install ./Weitblick-Remote-amd64.deb
+```
 
 ## Building from source
 

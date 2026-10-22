@@ -1,0 +1,92 @@
+# The Linux version (linux/): builds, tests and packages it on every change that touches it, installs the
+# package on a clean Ubuntu, and attaches the packages to a published release, next to the DMG and ZIP from
+# scripts/release.sh. Asset names carry no version, like the macOS ones: the README links to
+# releases/latest/download/Weitblick-Remote-<arch>.deb.
+name: Linux
+
+on:
+  push:
+    paths:
+      - "linux/**"
+      - "Sources/WeitblickBridge/**"
+      - "design/icon/**"
+      - "Packages/ConnectionStore/Tests/ConnectionStoreTests/Fixtures/**"
+      - "project.yml"
+      - ".github/workflows/linux.yml"
+  pull_request:
+    paths:
+      - "linux/**"
+      - "Sources/WeitblickBridge/**"
+      - "design/icon/**"
+      - "Packages/ConnectionStore/Tests/ConnectionStoreTests/Fixtures/**"
+      - "project.yml"
+      - ".github/workflows/linux.yml"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and test (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends build-essential dpkg-dev freerdp3-dev libwinpr3-dev \
+            python3-gi gir1.2-glib-2.0 gir1.2-gtk-4.0 gir1.2-adw-1 gir1.2-secret-1
+      - name: Build
+        run: make -C linux
+      - name: Test
+        run: make -C linux test V=1
+      - name: Package
+        run: |
+          make -C linux deb
+          cp linux/build/deb/weitblick-remote_*.deb Weitblick-Remote-${{ matrix.arch }}.deb
+      - name: Install the package on a clean Ubuntu 24.04
+        run: docker run --rm -v "$PWD":/src -w /src ubuntu:24.04 linux/scripts/test-deb.sh Weitblick-Remote-${{ matrix.arch }}.deb
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Weitblick-Remote-${{ matrix.arch }}.deb
+          path: Weitblick-Remote-${{ matrix.arch }}.deb
+          if-no-files-found: error
+
+  release:
+    name: Attach to the release
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: Weitblick-Remote-*.deb
+          merge-multiple: true
+      - name: Check the version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          for deb in Weitblick-Remote-*.deb; do
+            version=$(dpkg-deb -f "$deb" Version)
+            [ "v$version" = "$TAG" ] || { echo "$deb is $version, the release is $TAG"; exit 1; }
+          done
+      - name: Upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          sha256sum Weitblick-Remote-*.deb > SHA256SUMS-Linux.txt
+          gh release upload "$TAG" Weitblick-Remote-*.deb SHA256SUMS-Linux.txt --clobber --repo "$GITHUB_REPOSITORY"

@@ -42,7 +42,8 @@ while `e2e.sh` runs: the VM shares the Mac's CPU and typing checks get flaky und
 
 ## Release
 
-1. Set `MARKETING_VERSION` (and `CURRENT_PROJECT_VERSION`) in `project.yml`. When FreeRDP or OpenSSL change,
+1. Set `MARKETING_VERSION` (and `CURRENT_PROJECT_VERSION`) in `project.yml`, and the same version as `VERSION` in
+   `linux/weitblick/__init__.py` (the Linux tests check that they match). When FreeRDP or OpenSSL change,
    update their versions in `THIRD_PARTY_NOTICES.md`.
 2. `scripts/release.sh <version>` builds the Release configuration unsigned, signs the app ad-hoc with the
    hardened runtime, checks it with `codesign --verify --strict`, and writes to `build/release/`:
@@ -51,6 +52,9 @@ while `e2e.sh` runs: the VM shares the Mac's CPU and typing checks get flaky und
    - `SHA256SUMS.txt`
 3. Tag the commit `v<version>` and attach the three files to a GitHub release. Keep the file names as they are:
    the website links to `releases/latest/download/Weitblick-Remote.dmg`.
+4. Publishing the release starts the Linux workflow (`.github/workflows/linux.yml`), which builds and tests the
+   Linux version and attaches `Weitblick-Remote-amd64.deb`, `Weitblick-Remote-arm64.deb` and
+   `SHA256SUMS-Linux.txt`. It fails if the package version doesn't match the tag.
 
 The app is not notarized, so Gatekeeper rejects it (`spctl -a -vv` says "rejected"). Users allow it once:
 on macOS 15 and later, try to open it, then System Settings → Privacy & Security → Open Anyway; on macOS 14,
@@ -68,4 +72,5 @@ Builds the Release configuration signed with the identity from `Local.xcconfig` 
 
 The icon sources are SVGs in `design/icon` (`app-icon.svg`, plus pixel-grid variants for 16 and 32 px).
 `scripts/render-icon.sh` (needs `rsvg-convert` and ImageMagick) renders the asset catalog and the website
-exports in `design/icon/export`; the rendered PNGs are committed.
+exports in `design/icon/export`; the rendered PNGs are committed. The Linux version takes its icons from there
+too (`make -C linux` copies them into the hicolor sizes).
