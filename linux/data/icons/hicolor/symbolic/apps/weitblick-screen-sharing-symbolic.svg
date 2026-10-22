@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- A window with a title bar, like the macOS app's Screen Sharing (VNC) entries. -->
+  <path fill="#222" d="M3 2C1.9 2 1 2.9 1 4v8c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 1.5h10c.28 0 .5.22.5.5v1.5h-11V4c0-.28.22-.5.5-.5zm-.5 3h11V12c0 .28-.22.5-.5.5H3c-.28 0-.5-.22-.5-.5z"/>
+  <circle fill="#222" cx="4" cy="4.5" r=".75"/>
+  <circle fill="#222" cx="6.25" cy="4.5" r=".75"/>
+  <circle fill="#222" cx="8.5" cy="4.5" r=".75"/>
+</svg>

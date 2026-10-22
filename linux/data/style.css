@@ -21,3 +21,86 @@
 .wb-session-view {
   background-color: black;
 }
+
+/* The overview's connection list, laid out like the macOS app's: icon tile, inset separators. */
+
+.wb-connection-list {
+  background: none;
+}
+
+.wb-connection-list > row.wb-connection-row {
+  margin: 0 8px;
+  padding: 0 12px;
+  border-radius: 12px;
+}
+
+.wb-connection-row .wb-row-body {
+  padding: 10px 0;
+  border-bottom: 1px solid alpha(currentColor, 0.08);
+}
+
+.wb-connection-list > row:last-child .wb-row-body,
+.wb-connection-list > row:selected .wb-row-body {
+  border-bottom-color: transparent;
+}
+
+.wb-connection-icon {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 10px;
+  background-color: alpha(currentColor, 0.07);
+  color: @accent_color;
+}
+
+.wb-connection-icon.vnc {
+  color: @purple_3;
+}
+
+.wb-status-dot {
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 999px;
+  border: 2px solid @view_bg_color;
+  background-color: alpha(currentColor, 0.4);
+}
+
+.wb-status-dot.connected { background-color: @success_color; }
+.wb-status-dot.reconnecting { background-color: @warning_color; }
+.wb-status-dot.disconnected { background-color: @error_color; }
+.wb-status-label.connecting { color: alpha(currentColor, 0.55); }
+.wb-status-label.connected { color: @success_color; }
+.wb-status-label.reconnecting { color: @warning_color; }
+.wb-status-label.disconnected { color: @error_color; }
+
+.wb-row-menu {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+.wb-connection-list > row:hover .wb-row-menu,
+.wb-connection-list > row:selected .wb-row-menu,
+.wb-connection-list > row:focus-within .wb-row-menu,
+.wb-row-menu:checked {
+  opacity: 1;
+}
+
+/* Import preview: "New", "Update", "Unchanged" as pills, like the Mac's. */
+
+.wb-import-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.wb-import-badge.new {
+  background-color: alpha(@success_color, 0.15);
+  color: @success_color;
+}
+
+.wb-import-badge.update {
+  background-color: alpha(@accent_bg_color, 0.15);
+  color: @accent_color;
+}
+
+.wb-import-badge.unchanged {
+  background-color: alpha(currentColor, 0.08);
+}

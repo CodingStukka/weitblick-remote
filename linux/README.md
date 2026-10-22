@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/session.png" width="860" alt="Weitblick Remote with the overview tab and a session tab">
+  <img src="docs/screenshots/overview.png" width="860" alt="The overview: connections with their status and last use, a session tab per connection">
 </p>
 
 ## What it is
@@ -58,6 +58,11 @@ imports and the MCP server for AI agents. The runtime needs nothing beyond what 
 - **AI agents (MCP):** Claude Code, Codex or any MCP client can use your connections – screenshots, mouse, keyboard,
   clipboard and on-screen text, all inside the RDP connection. See below.
 - English and German interface.
+
+<p align="center">
+  <img src="docs/screenshots/session.png" width="420" alt="A session tab next to the overview">
+  <img src="docs/screenshots/import.png" width="420" alt="Importing connections from Jump Desktop with a preview">
+</p>
 
 `connections.json` has the same format as the macOS app's file: copy
 `~/Library/Application Support/Weitblick Remote/connections.json` from the Mac to `~/.config/weitblick-remote/` to take

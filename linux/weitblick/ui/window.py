@@ -42,7 +42,8 @@ class MainWindow(Adw.ApplicationWindow):
         self._page_handlers: dict[SessionPage, list[int]] = {}
 
         self.tab_view = Adw.TabView()
-        self.tab_bar = Adw.TabBar(view=self.tab_view, autohide=True)
+        # Shown from the first session tab on (or while a tab is dragged in), like the Mac's tab bar.
+        self.tab_bar = Adw.TabBar(view=self.tab_view, autohide=False, visible=False)
         self.header = Adw.HeaderBar()
         self.window_title = Adw.WindowTitle(title=_("Weitblick Remote"))
         self.header.set_title_widget(self.window_title)
@@ -62,14 +63,18 @@ class MainWindow(Adw.ApplicationWindow):
             page = self.tab_view.append_pinned(self.overview)
             page.set_title(_("Overview"))
             page.set_icon(Gio.ThemedIcon.new("view-list-symbolic"))
+            self.search_title = Adw.Clamp(maximum_size=420, child=self.overview.search)
         else:
             self.overview = None
+            self.search_title = None
 
         self.tab_view.connect("close-page", self._on_close_page)
         self.tab_view.connect("notify::selected-page", lambda *_: self._selection_changed())
         self.tab_view.connect("create-window", self._on_create_window)
         self.tab_view.connect("page-attached", self._on_page_attached)
         self.tab_view.connect("page-detached", self._on_page_detached)
+        self.tab_view.connect("notify::n-pages", lambda *_: self._update_tab_bar())
+        self.tab_view.connect("notify::is-transferring-page", lambda *_: self._update_tab_bar())
         self.connect("notify::is-active", lambda *_: self._selection_changed())
         self.connect("notify::fullscreened", lambda *_: self._fullscreen_changed())
         self.connect("close-request", self._on_close_request)
@@ -84,6 +89,9 @@ class MainWindow(Adw.ApplicationWindow):
 
         self._install_actions()
         self._selection_changed()
+        if self.overview is not None:
+            # Not the first row: GTK's initial focus would select it.
+            self.set_focus(self.overview.search)
 
     # MARK: Header
 
@@ -108,6 +116,13 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append_section(None, quit_section)
         self.header.pack_end(Gtk.MenuButton(icon_name="open-menu-symbolic", menu_model=menu,
                                             tooltip_text=_("Main Menu"), primary=True))
+
+        sort_menu = Gio.Menu()
+        sort_menu.append(_("By Name"), "win.sort-order::name")
+        sort_menu.append(_("Recently Used First"), "win.sort-order::recent")
+        self.sort_button = Gtk.MenuButton(icon_name="view-sort-descending-symbolic", menu_model=sort_menu,
+                                          tooltip_text=_("Sort Order"))
+        self.header.pack_end(self.sort_button)
 
         self.fullscreen_button = Gtk.Button(icon_name="view-fullscreen-symbolic",
                                             tooltip_text=_("Full Screen (Ctrl+Alt+Super+F)"),
@@ -169,6 +184,9 @@ class MainWindow(Adw.ApplicationWindow):
                                GLib.Variant.new_string(TextInput.SMART.value))
         self._clipboard_sync = add("clipboard-sync", self._on_clipboard_sync, None, GLib.Variant.new_boolean(True))
         self._reconnect = add("reconnect", lambda *_: self._with_page(lambda p: p.reconnect()))
+        if self.overview is not None:
+            add("sort-order", self._on_sort_order, GLib.VariantType.new("s"),
+                GLib.Variant.new_string(self.overview.sort_order))
 
     def _with_page(self, body) -> None:
         page = self.selected_session_page()
@@ -182,6 +200,10 @@ class MainWindow(Adw.ApplicationWindow):
         action.set_state(value)
         self._with_page(lambda page: page.set_text_input(TextInput.parse(value.get_string())))
 
+    def _on_sort_order(self, action, value) -> None:
+        action.set_state(value)
+        self.overview.set_sort_order(value.get_string())
+
     def _on_clipboard_sync(self, action, _value) -> None:
         enabled = not action.get_state().get_boolean()
         action.set_state(GLib.Variant.new_boolean(enabled))
@@ -193,12 +215,18 @@ class MainWindow(Adw.ApplicationWindow):
         self.session_button.set_visible(session_selected)
         self.fullscreen_button.set_visible(session_selected)
         self.new_button.set_visible(not session_selected and self.has_overview)
+        self.sort_button.set_visible(not session_selected and self.has_overview)
         if page is None:
-            self.window_title.set_title(_("Weitblick Remote"))
-            self.window_title.set_subtitle("")
+            # The overview: its search field takes the title's place.
+            if self.search_title is not None:
+                self._set_title_widget(self.search_title)
+            else:
+                self.window_title.set_title(_("Weitblick Remote"))
+                self.window_title.set_subtitle("")
             for action in (self._send_keys, self._text_input, self._clipboard_sync, self._reconnect):
                 action.set_enabled(False)
             return
+        self._set_title_widget(self.window_title)
         self.window_title.set_title(page.title)
         self.window_title.set_subtitle("" if page.status.kind == "connected" else page.status.label)
         live = page.is_connected and page.accepts_local_input
@@ -208,6 +236,13 @@ class MainWindow(Adw.ApplicationWindow):
         self._clipboard_sync.set_enabled(page.connection.redirection.clipboard and not page.is_agent_session)
         self._clipboard_sync.set_state(GLib.Variant.new_boolean(page.clipboard_enabled))
         self._reconnect.set_enabled(page.can_reconnect)
+
+    def _set_title_widget(self, widget: Gtk.Widget) -> None:
+        if self.header.get_title_widget() is not widget:
+            self.header.set_title_widget(widget)
+
+    def _update_tab_bar(self) -> None:
+        self.tab_bar.set_visible(self.tab_view.get_n_pages() > 1 or self.tab_view.get_is_transferring_page())
 
     def show_toast(self, message: str) -> None:
         self.toasts.add_toast(Adw.Toast(title=message, timeout=4))

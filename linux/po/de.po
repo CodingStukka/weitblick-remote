@@ -165,8 +165,8 @@ msgstr "Version anzeigen"
 #: weitblick/clipboard/sync.py:239
 msgid "Copying %d file from the remote PC…"
 msgid_plural "Copying %d files from the remote PC…"
-msgstr[0] "%d Datei wird vom entfernten PC kopiert …"
-msgstr[1] "%d Dateien werden vom entfernten PC kopiert …"
+msgstr[0] "%d Datei wird vom entfernten PC kopiert…"
+msgstr[1] "%d Dateien werden vom entfernten PC kopiert…"
 
 #: weitblick/clipboard/sync.py:247
 msgid "Copying files from the remote PC… %d %%"
@@ -678,7 +678,7 @@ msgstr "Der Tab wird geschlossen. Geöffnete Programme laufen unter Windows weit
 msgid "Don’t ask again"
 msgstr "Nicht mehr fragen"
 
-#: weitblick/ui/dialogs.py:148 weitblick/ui/shortcuts.py:27 weitblick/ui/window.py:141
+#: weitblick/ui/dialogs.py:148 weitblick/ui/shortcuts.py:27 weitblick/ui/window.py:156
 msgid "Disconnect"
 msgstr "Trennen"
 
@@ -690,7 +690,7 @@ msgstr "OK"
 msgid "Sign In"
 msgstr "Anmelden"
 
-#: weitblick/ui/dialogs.py:36 weitblick/ui/overview.py:52 weitblick/ui/overview.py:201
+#: weitblick/ui/dialogs.py:36 weitblick/ui/overview.py:292
 msgid "Connect"
 msgstr "Verbinden"
 
@@ -782,7 +782,7 @@ msgstr "Gesichertes Passwort löschen"
 msgid "Opens in your VNC app (a vnc:// link, e.g. Remmina or GNOME Connections), which handles sign-in and settings itself."
 msgstr "Öffnet sich in deiner VNC-App (als vnc://-Link, z. B. Remmina oder GNOME Verbindungen), die Anmeldung und Einstellungen selbst übernimmt."
 
-#: weitblick/ui/editor.py:163
+#: weitblick/ui/editor.py:163 weitblick/ui/importing.py:233
 msgid "Notes"
 msgstr "Notizen"
 
@@ -834,19 +834,19 @@ msgstr "Im Vollbild starten"
 msgid "Keys go to Windows as on a PC keyboard. Shortcuts with Ctrl+Alt+Super stay in Weitblick Remote; Ctrl+Alt+End sends Ctrl+Alt+Del."
 msgstr "Tasten kommen in Windows an wie auf einer PC-Tastatur. Kurzbefehle mit Strg+Alt+Super bleiben in Weitblick Remote; Strg+Alt+Ende sendet Strg+Alt+Entf."
 
-#: weitblick/ui/editor.py:229 weitblick/ui/window.py:131
+#: weitblick/ui/editor.py:229 weitblick/ui/window.py:146
 msgid "Typing"
 msgstr "Tippen"
 
-#: weitblick/ui/editor.py:230 weitblick/ui/window.py:125
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:140
 msgid "Smart (AltGr characters as Unicode)"
 msgstr "Smart (AltGr-Zeichen als Unicode)"
 
-#: weitblick/ui/editor.py:230 weitblick/ui/window.py:126
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:141
 msgid "Characters as Unicode"
 msgstr "Zeichen als Unicode"
 
-#: weitblick/ui/editor.py:230 weitblick/ui/window.py:127
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:142
 msgid "Physical keys only"
 msgstr "Nur physische Tasten"
 
@@ -962,7 +962,7 @@ msgstr "Ob KI-Agenten diese Verbindung über MCP steuern dürfen (Einstellungen 
 msgid "Ask"
 msgstr "Fragen"
 
-#: weitblick/ui/editor.py:345 weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:133
+#: weitblick/ui/editor.py:345 weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:148
 msgid "Never"
 msgstr "Nie"
 
@@ -1010,7 +1010,7 @@ msgstr "importiert"
 msgid "Connection not saved"
 msgstr "Verbindung nicht gesichert"
 
-#: weitblick/ui/editor.py:58 weitblick/ui/window.py:91
+#: weitblick/ui/editor.py:58 weitblick/ui/window.py:99
 msgid "New Connection"
 msgstr "Neue Verbindung"
 
@@ -1046,53 +1046,57 @@ msgstr "Erweitert"
 msgid "Can’t read Jump connections"
 msgstr "Jump-Verbindungen nicht lesbar"
 
-#: weitblick/ui/importing.py:149
-msgid "Import from {source}"
-msgstr "Aus {source} importieren"
+#: weitblick/ui/importing.py:146 weitblick/ui/overview.py:51
+msgid "Screen Sharing"
+msgstr "Bildschirmfreigabe"
 
-#: weitblick/ui/importing.py:166
-msgid "{n} new"
-msgstr "{n} neu"
-
-#: weitblick/ui/importing.py:168
-msgid "{n} changed"
-msgstr "{n} geändert"
-
-#: weitblick/ui/importing.py:170
-msgid "{n} unchanged"
-msgstr "{n} unverändert"
-
-#: weitblick/ui/importing.py:173
-msgid "{n} not imported"
-msgstr "{n} nicht übernommen"
-
-#: weitblick/ui/importing.py:174 weitblick/ui/overview.py:127
-msgid "No connections found"
-msgstr "Keine Verbindungen gefunden"
-
-#: weitblick/ui/importing.py:176
-msgid "{counts}. {source}’s files are only read, never changed."
-msgstr "{counts}. Die Dateien von {source} werden nur gelesen, nie verändert."
-
-#: weitblick/ui/importing.py:181 weitblick/ui/settings_dialog.py:53
-msgid "Connections"
-msgstr "Verbindungen"
-
-#: weitblick/ui/importing.py:188
+#: weitblick/ui/importing.py:152
 msgid "New"
 msgstr "Neu"
 
-#: weitblick/ui/importing.py:188
+#: weitblick/ui/importing.py:152
 msgid "Update"
 msgstr "Ändern"
 
-#: weitblick/ui/importing.py:189
+#: weitblick/ui/importing.py:153
 msgid "Unchanged"
 msgstr "Unverändert"
 
-#: weitblick/ui/importing.py:206
-msgid "Not imported"
-msgstr "Nicht übernommen"
+#: weitblick/ui/importing.py:163
+msgid "Import from {source}"
+msgstr "Aus {source} importieren"
+
+#: weitblick/ui/importing.py:180
+msgid "{n} new"
+msgstr "{n} neu"
+
+#: weitblick/ui/importing.py:182
+msgid "{n} changed"
+msgstr "{n} geändert"
+
+#: weitblick/ui/importing.py:184
+msgid "{n} unchanged"
+msgstr "{n} unverändert"
+
+#: weitblick/ui/importing.py:187
+msgid "{n} not imported"
+msgstr "{n} nicht übernommen"
+
+#: weitblick/ui/importing.py:188 weitblick/ui/overview.py:179
+msgid "No connections found"
+msgstr "Keine Verbindungen gefunden"
+
+#: weitblick/ui/importing.py:193
+msgid "Import connections from {source}"
+msgstr "Verbindungen aus {source} übernehmen"
+
+#: weitblick/ui/importing.py:195
+msgid "{counts}. {source}’s files are only read, never changed."
+msgstr "{counts}. Die Dateien von {source} werden nur gelesen, nie verändert."
+
+#: weitblick/ui/importing.py:203 weitblick/ui/settings_dialog.py:53
+msgid "Connections"
+msgstr "Verbindungen"
 
 #: weitblick/ui/importing.py:21
 msgid "Open .rdp File"
@@ -1103,18 +1107,22 @@ msgid "Remote Desktop files"
 msgstr "Remotedesktop-Dateien"
 
 #: weitblick/ui/importing.py:223
+msgid "Not imported"
+msgstr "Nicht übernommen"
+
+#: weitblick/ui/importing.py:252
 msgid "Import {n} Connection"
 msgid_plural "Import {n} Connections"
 msgstr[0] "{n} Verbindung importieren"
 msgstr[1] "{n} Verbindungen importieren"
 
-#: weitblick/ui/importing.py:237
+#: weitblick/ui/importing.py:266
 msgid "Imported {n} connection."
 msgid_plural "Imported {n} connections."
 msgstr[0] "{n} Verbindung importiert."
 msgstr[1] "{n} Verbindungen importiert."
 
-#: weitblick/ui/importing.py:47 weitblick/ui/importing.py:55 weitblick/ui/importing.py:232
+#: weitblick/ui/importing.py:47 weitblick/ui/importing.py:55 weitblick/ui/importing.py:261
 msgid "Import failed"
 msgstr "Import fehlgeschlagen"
 
@@ -1154,117 +1162,117 @@ msgstr "Remmina-Verbindungen lassen sich nicht lesen"
 msgid "Choose the folder with the .jump files (copied from the Mac)"
 msgstr "Ordner mit den .jump-Dateien auswählen (vom Mac kopiert)"
 
-#: weitblick/ui/overview.py:102
-msgid "By Name"
-msgstr "Nach Name"
-
-#: weitblick/ui/overview.py:102
-msgid "Recently Used First"
-msgstr "Zuletzt verwendet zuerst"
-
-#: weitblick/ui/overview.py:103
-msgid "Sort Order"
-msgstr "Sortierung"
-
-#: weitblick/ui/overview.py:119
-msgid "No Connections Yet"
-msgstr "Noch keine Verbindungen"
-
-#: weitblick/ui/overview.py:120
-msgid "Create a connection or import your connections from Remmina, Jump Desktop or an .rdp file."
-msgstr "Lege eine Verbindung an oder importiere deine Verbindungen aus Remmina, Jump Desktop oder einer .rdp-Datei."
-
-#: weitblick/ui/overview.py:123
-msgid "New Connection…"
-msgstr "Neue Verbindung…"
-
-#: weitblick/ui/overview.py:124 weitblick/ui/window.py:98
-msgid "Import from Remmina…"
-msgstr "Aus Remmina importieren …"
-
-#: weitblick/ui/overview.py:129
-msgid "Can’t Read Connections"
-msgstr "Verbindungen nicht lesbar"
-
-#: weitblick/ui/overview.py:16
-msgid "Never connected"
-msgstr "Noch nie verbunden"
-
-#: weitblick/ui/overview.py:19
-msgid "Last used just now"
-msgstr "Zuletzt gerade eben"
-
-#: weitblick/ui/overview.py:201
-msgid "Edit…"
-msgstr "Bearbeiten…"
-
-#: weitblick/ui/overview.py:202
-msgid "Duplicate"
-msgstr "Duplizieren"
-
-#: weitblick/ui/overview.py:209
-msgid "Wake Up (Wake-on-LAN)"
-msgstr "Aufwecken (Wake-on-LAN)"
-
-#: weitblick/ui/overview.py:212
-msgid "Export as .rdp File…"
-msgstr "Als .rdp exportieren…"
-
-#: weitblick/ui/overview.py:217
-msgid "Delete…"
-msgstr "Löschen…"
-
-#: weitblick/ui/overview.py:22
-msgid "Last used {n} minute ago"
-msgid_plural "Last used {n} minutes ago"
-msgstr[0] "Zuletzt vor {n} Minute benutzt"
-msgstr[1] "Zuletzt vor {n} Minuten benutzt"
-
-#: weitblick/ui/overview.py:25
-msgid "Last used {n} hour ago"
-msgid_plural "Last used {n} hours ago"
-msgstr[0] "Zuletzt vor {n} Stunde benutzt"
-msgstr[1] "Zuletzt vor {n} Stunden benutzt"
-
-#: weitblick/ui/overview.py:28
-msgid "Last used {n} day ago"
-msgid_plural "Last used {n} days ago"
-msgstr[0] "Zuletzt vor {n} Tag benutzt"
-msgstr[1] "Zuletzt vor {n} Tagen benutzt"
-
-#: weitblick/ui/overview.py:30
-msgid "Last used {n} month ago"
-msgid_plural "Last used {n} months ago"
-msgstr[0] "Zuletzt vor {n} Monat benutzt"
-msgstr[1] "Zuletzt vor {n} Monaten benutzt"
-
-#: weitblick/ui/overview.py:49
-msgid "Watch"
-msgstr "Zusehen"
-
-#: weitblick/ui/overview.py:50
-msgid "Open the agent’s session in a tab"
-msgstr "Die Sitzung des Agenten in einem Tab öffnen"
-
-#: weitblick/ui/overview.py:55
-msgid "More"
-msgstr "Mehr"
-
-#: weitblick/ui/overview.py:86
+#: weitblick/ui/overview.py:136
 msgid "Agent paused"
 msgstr "Agent pausiert"
 
-#: weitblick/ui/overview.py:86
+#: weitblick/ui/overview.py:136
 msgid "Agent"
 msgstr "Agent"
 
-#: weitblick/ui/overview.py:87
+#: weitblick/ui/overview.py:137
 msgid "Controlled by “{client}”"
 msgstr "Gesteuert von „{client}“"
 
-#: weitblick/ui/overview.py:99
-msgid "Search connections"
-msgstr "Verbindungen durchsuchen"
+#: weitblick/ui/overview.py:152 weitblick/ui/shortcuts.py:34
+msgid "Search"
+msgstr "Suchen"
+
+#: weitblick/ui/overview.py:17
+msgid "Never connected"
+msgstr "Noch nie verbunden"
+
+#: weitblick/ui/overview.py:171
+msgid "No Connections Yet"
+msgstr "Noch keine Verbindungen"
+
+#: weitblick/ui/overview.py:172
+msgid "Create a connection or import your connections from Remmina, Jump Desktop or an .rdp file."
+msgstr "Lege eine Verbindung an oder importiere deine Verbindungen aus Remmina, Jump Desktop oder einer .rdp-Datei."
+
+#: weitblick/ui/overview.py:175
+msgid "New Connection…"
+msgstr "Neue Verbindung…"
+
+#: weitblick/ui/overview.py:176 weitblick/ui/window.py:106
+msgid "Import from Remmina…"
+msgstr "Aus Remmina importieren…"
+
+#: weitblick/ui/overview.py:181
+msgid "Can’t Read Connections"
+msgstr "Verbindungen nicht lesbar"
+
+#: weitblick/ui/overview.py:20
+msgid "Last used just now"
+msgstr "Zuletzt gerade eben"
+
+#: weitblick/ui/overview.py:23
+msgid "Last used {n} minute ago"
+msgid_plural "Last used {n} minutes ago"
+msgstr[0] "Zuletzt vor {n} Minute"
+msgstr[1] "Zuletzt vor {n} Minuten"
+
+#: weitblick/ui/overview.py:26
+msgid "Last used {n} hour ago"
+msgid_plural "Last used {n} hours ago"
+msgstr[0] "Zuletzt vor {n} Stunde"
+msgstr[1] "Zuletzt vor {n} Stunden"
+
+#: weitblick/ui/overview.py:29
+msgid "Last used {n} day ago"
+msgid_plural "Last used {n} days ago"
+msgstr[0] "Zuletzt vor {n} Tag"
+msgstr[1] "Zuletzt vor {n} Tagen"
+
+#: weitblick/ui/overview.py:297
+msgid "Edit…"
+msgstr "Bearbeiten…"
+
+#: weitblick/ui/overview.py:297
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: weitblick/ui/overview.py:302
+msgid "Export as .rdp File…"
+msgstr "Als .rdp exportieren…"
+
+#: weitblick/ui/overview.py:306
+msgid "Wake Up (Wake-on-LAN)"
+msgstr "Aufwecken (Wake-on-LAN)"
+
+#: weitblick/ui/overview.py:311
+msgid "Delete…"
+msgstr "Löschen…"
+
+#: weitblick/ui/overview.py:32
+msgid "Last used {n} week ago"
+msgid_plural "Last used {n} weeks ago"
+msgstr[0] "Zuletzt vor {n} Woche"
+msgstr[1] "Zuletzt vor {n} Wochen"
+
+#: weitblick/ui/overview.py:35
+msgid "Last used {n} month ago"
+msgid_plural "Last used {n} months ago"
+msgstr[0] "Zuletzt vor {n} Monat"
+msgstr[1] "Zuletzt vor {n} Monaten"
+
+#: weitblick/ui/overview.py:37
+msgid "Last used {n} year ago"
+msgid_plural "Last used {n} years ago"
+msgstr[0] "Zuletzt vor {n} Jahr"
+msgstr[1] "Zuletzt vor {n} Jahren"
+
+#: weitblick/ui/overview.py:83
+msgid "Watch"
+msgstr "Zusehen"
+
+#: weitblick/ui/overview.py:84
+msgid "Open the agent’s session in a tab"
+msgstr "Die Sitzung des Agenten in einem Tab öffnen"
+
+#: weitblick/ui/overview.py:93
+msgid "More"
+msgstr "Mehr"
 
 #: weitblick/ui/session_page.py:256
 msgid "The session couldn’t be created."
@@ -1282,7 +1290,7 @@ msgstr "Passwort nicht gesichert"
 msgid "The keyring didn’t accept the password. The session continues anyway."
 msgstr "Der Schlüsselbund hat das Passwort nicht angenommen. Die Sitzung läuft trotzdem weiter."
 
-#: weitblick/ui/session_page.py:623 weitblick/ui/window.py:140
+#: weitblick/ui/session_page.py:623 weitblick/ui/window.py:155
 msgid "Reconnect"
 msgstr "Erneut verbinden"
 
@@ -1322,7 +1330,7 @@ msgstr "Ein Agent steuert diese Sitzung ({client})"
 msgid "Take over"
 msgstr "Übernehmen"
 
-#: weitblick/ui/settings_dialog.py:22 weitblick/ui/shortcuts.py:36 weitblick/ui/window.py:102
+#: weitblick/ui/settings_dialog.py:22 weitblick/ui/shortcuts.py:36 weitblick/ui/window.py:110
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1358,7 +1366,7 @@ msgstr "Alt+Tab, Super und andere Kurzbefehle, die sonst der Desktop nimmt"
 msgid "In full screen"
 msgstr "Im Vollbild"
 
-#: weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:133
+#: weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:148
 msgid "Always"
 msgstr "Immer"
 
@@ -1414,7 +1422,7 @@ msgstr "An Windows gesendet"
 msgid "Ctrl+Alt+Del"
 msgstr "Strg+Alt+Entf"
 
-#: weitblick/ui/shortcuts.py:32 weitblick/ui/window.py:63
+#: weitblick/ui/shortcuts.py:32 weitblick/ui/window.py:64
 msgid "Overview"
 msgstr "Übersicht"
 
@@ -1422,55 +1430,71 @@ msgstr "Übersicht"
 msgid "New connection"
 msgstr "Neue Verbindung"
 
-#: weitblick/ui/shortcuts.py:34
-msgid "Search"
-msgstr "Suchen"
-
 #: weitblick/ui/shortcuts.py:35
 msgid "Open .rdp file"
 msgstr ".rdp-Datei öffnen"
 
-#: weitblick/ui/shortcuts.py:37 weitblick/ui/window.py:107
+#: weitblick/ui/shortcuts.py:37 weitblick/ui/window.py:115
 msgid "Quit"
 msgstr "Beenden"
 
-#: weitblick/ui/window.py:103
+#: weitblick/ui/window.py:105
+msgid "Open .rdp File…"
+msgstr ".rdp-Datei öffnen…"
+
+#: weitblick/ui/window.py:107
+msgid "Import from Jump Desktop…"
+msgstr "Aus Jump importieren…"
+
+#: weitblick/ui/window.py:111
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkürzel"
 
-#: weitblick/ui/window.py:104
+#: weitblick/ui/window.py:112
 msgid "About Weitblick Remote"
 msgstr "Über Weitblick Remote"
 
-#: weitblick/ui/window.py:110
+#: weitblick/ui/window.py:118
 msgid "Main Menu"
 msgstr "Hauptmenü"
 
-#: weitblick/ui/window.py:113
+#: weitblick/ui/window.py:121
+msgid "By Name"
+msgstr "Nach Name"
+
+#: weitblick/ui/window.py:122
+msgid "Recently Used First"
+msgstr "Zuletzt verwendet zuerst"
+
+#: weitblick/ui/window.py:124
+msgid "Sort Order"
+msgstr "Sortierung"
+
+#: weitblick/ui/window.py:128
 msgid "Full Screen (Ctrl+Alt+Super+F)"
 msgstr "Vollbild (Strg+Alt+Super+F)"
 
-#: weitblick/ui/window.py:120
+#: weitblick/ui/window.py:135
 msgid "Send {keys}"
 msgstr "{keys} senden"
 
-#: weitblick/ui/window.py:123
+#: weitblick/ui/window.py:138
 msgid "Keys"
 msgstr "Tasten"
 
-#: weitblick/ui/window.py:133
+#: weitblick/ui/window.py:148
 msgid "In Full Screen"
 msgstr "Im Vollbild"
 
-#: weitblick/ui/window.py:137
+#: weitblick/ui/window.py:152
 msgid "Pass Alt+Tab, Super… to Windows"
 msgstr "Alt+Tab, Super … an Windows geben"
 
-#: weitblick/ui/window.py:139
+#: weitblick/ui/window.py:154
 msgid "Sync Clipboard"
 msgstr "Zwischenablage abgleichen"
 
-#: weitblick/ui/window.py:144
+#: weitblick/ui/window.py:159
 msgid "Session"
 msgstr "Sitzung"
 
@@ -1486,30 +1510,22 @@ msgstr "Task-Manager (Strg+Umschalt+Esc)"
 msgid "Print Screen"
 msgstr "Druck"
 
-#: weitblick/ui/window.py:321
+#: weitblick/ui/window.py:356
 msgid "Agent: {client}"
 msgstr "Agent: {client}"
 
-#: weitblick/ui/window.py:37 weitblick/ui/window.py:47 weitblick/ui/window.py:197
+#: weitblick/ui/window.py:37 weitblick/ui/window.py:48 weitblick/ui/window.py:224
 msgid "Weitblick Remote"
 msgstr "Weitblick Remote"
 
-#: weitblick/ui/window.py:413
+#: weitblick/ui/window.py:448
 msgid "Disconnect all sessions?"
 msgstr "Alle Sitzungen trennen?"
 
-#: weitblick/ui/window.py:414
+#: weitblick/ui/window.py:449
 msgid "{n} sessions are open in this window. Open programs keep running in Windows."
 msgstr "In diesem Fenster sind {n} Sitzungen offen. Geöffnete Programme laufen in Windows weiter."
 
-#: weitblick/ui/window.py:416
+#: weitblick/ui/window.py:451
 msgid "Disconnect All"
 msgstr "Alle trennen"
-
-#: weitblick/ui/window.py:97
-msgid "Open .rdp File…"
-msgstr ".rdp-Datei öffnen …"
-
-#: weitblick/ui/window.py:99
-msgid "Import from Jump Desktop…"
-msgstr "Aus Jump importieren…"

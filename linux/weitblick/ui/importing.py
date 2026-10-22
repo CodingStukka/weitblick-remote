@@ -10,7 +10,7 @@ from gi.repository import Adw, Gio, GLib, Gtk
 
 from ..i18n import _, ngettext
 from ..store import ImportAction, ImportPlan, jump, rdpfile, remmina
-from ..store.connection import new_id
+from ..store.connection import ConnectionProtocol, new_id
 
 log = logging.getLogger(__name__)
 
@@ -140,6 +140,20 @@ def _alert(parent: Gtk.Widget, heading: str, body: str) -> None:
     dialog.present(parent)
 
 
+def _import_address(connection) -> str:
+    text = f"{connection.host}:{connection.port}"
+    if connection.protocol is ConnectionProtocol.VNC:
+        text += " · " + _("Screen Sharing")
+    return text
+
+
+def _badge(action: ImportAction) -> Gtk.Label:
+    """"New" in green, "Update" in the accent color, "Unchanged" grey, as pills like the Mac's."""
+    label, kind = {ImportAction.CREATE: (_("New"), "new"), ImportAction.UPDATE: (_("Update"), "update"),
+                   ImportAction.UNCHANGED: (_("Unchanged"), "unchanged")}[action]
+    return Gtk.Label(label=label, valign=Gtk.Align.CENTER, css_classes=["wb-import-badge", kind, "caption-heading"])
+
+
 class ImportDialog(Adw.Dialog):
     """Preview with check boxes, then the import. The source files are only read."""
 
@@ -152,7 +166,7 @@ class ImportDialog(Adw.Dialog):
         self.plan = plan
         self._checks: dict[str, Gtk.CheckButton] = {}
 
-        header = Adw.HeaderBar(show_end_title_buttons=False, show_start_title_buttons=False)
+        header = Adw.HeaderBar(show_end_title_buttons=False, show_start_title_buttons=False, show_title=False)
         cancel = Gtk.Button(label=_("Cancel"))
         cancel.connect("clicked", lambda *_: self.close())
         header.pack_start(cancel)
@@ -172,34 +186,37 @@ class ImportDialog(Adw.Dialog):
         if skipped:
             parts.append(_("{n} not imported").format(n=len(skipped)))
         counts = ", ".join(parts) if parts else _("No connections found")
-        summary = Adw.PreferencesGroup(
-            description=_("{counts}. {source}’s files are only read, never changed.").format(counts=counts,
-                                                                                         source=source))
+        intro = Gtk.Box(spacing=16)
+        intro.append(Gtk.Image(icon_name="folder-download-symbolic", pixel_size=40, valign=Gtk.Align.CENTER,
+                               css_classes=["dim-label"]))
+        texts = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4, valign=Gtk.Align.CENTER)
+        texts.append(Gtk.Label(label=_("Import connections from {source}").format(source=source), xalign=0,
+                               wrap=True, css_classes=["title-3"]))
+        texts.append(Gtk.Label(label=_("{counts}. {source}’s files are only read, never changed.").format(
+            counts=counts, source=source), xalign=0, wrap=True, css_classes=["dim-label"]))
+        intro.append(texts)
+        summary = Adw.PreferencesGroup()
+        summary.add(intro)
         page.add(summary)
 
         reports = {item.unique_id: item for item in plan.report.connections if item.unique_id}
-        group = Adw.PreferencesGroup(title=_("Connections"), description=password_notice)
+        group = Adw.PreferencesGroup(title=_("Connections"))
+        notes: list[str] = []
         for entry in plan.entries:
             connection = entry.connection
             check = Gtk.CheckButton(active=entry.action is not ImportAction.UNCHANGED,
                                     sensitive=entry.action is not ImportAction.UNCHANGED, valign=Gtk.Align.CENTER)
             check.connect("toggled", lambda *_: self._update_button())
             self._checks[entry.id] = check
-            badge = {ImportAction.CREATE: _("New"), ImportAction.UPDATE: _("Update"),
-                     ImportAction.UNCHANGED: _("Unchanged")}[entry.action]
-            row = Adw.ExpanderRow(title=connection.name, subtitle=f"{connection.host} · {badge}")
+            row = Adw.ActionRow(title=connection.name, subtitle=_import_address(connection), activatable_widget=check)
             row.add_prefix(check)
-            report = reports.get(connection.import_source.unique_id if connection.import_source else None)
-            notes = []
-            if report is not None:
-                notes += [f"{issue.field}: {issue.reason}" for issue in report.ignored_fields]
-                notes += [warning for warning in report.warnings if warning != password_notice]
-            if notes:
-                for note in notes:
-                    row.add_row(Adw.ActionRow(title=note, title_lines=3, css_classes=["dim-label"]))
-            else:
-                row.set_enable_expansion(False)
+            row.add_suffix(_badge(entry.action))
             group.add(row)
+            report = reports.get(connection.import_source.unique_id if connection.import_source else None)
+            if report is not None:
+                own = [f"{issue.field}: {issue.reason}" for issue in report.ignored_fields]
+                own += [warning for warning in report.warnings if warning != password_notice]
+                notes += [f"{connection.name} – {note}" for note in own]
         page.add(group)
 
         if skipped:
@@ -208,6 +225,18 @@ class ImportDialog(Adw.Dialog):
                 reason = "; ".join(item.warnings) or ", ".join(f"{i.field}: {i.reason}" for i in item.ignored_fields)
                 unread.add(Adw.ActionRow(title=item.file_name, subtitle=reason, subtitle_lines=3))
             page.add(unread)
+
+        # Like the Mac's import sheet: everything to check in one list, the password notice last.
+        if password_notice:
+            notes.append(password_notice)
+        if notes:
+            notes_group = Adw.PreferencesGroup(title=_("Notes"))
+            for note in notes:
+                row = Adw.ActionRow(title=note, title_lines=0, use_markup=False, css_classes=["wb-import-note"])
+                row.add_prefix(Gtk.Image(icon_name="dialog-information-symbolic", valign=Gtk.Align.CENTER,
+                                         css_classes=["dim-label"]))
+                notes_group.add(row)
+            page.add(notes_group)
 
         toolbar = Adw.ToolbarView()
         toolbar.add_top_bar(header)
