@@ -1,0 +1,1514 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: weitblick-remote\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: weitblick/agent/ui.py:101 weitblick/ui/editor.py:345
+msgid "Always allow"
+msgstr ""
+
+#: weitblick/agent/ui.py:102
+msgid "Sets this connection’s agent access to Always allow"
+msgstr ""
+
+#: weitblick/agent/ui.py:176
+msgid "AI agents (MCP)"
+msgstr ""
+
+#: weitblick/agent/ui.py:177
+msgid "Agents connect through the weitblick-mcp helper. Each connection decides in its Security settings whether agents are asked about, always allowed or never allowed. Everything agents do is logged in {path}."
+msgstr ""
+
+#: weitblick/agent/ui.py:186
+msgid "Let AI agents control Windows sessions"
+msgstr ""
+
+#: weitblick/agent/ui.py:196
+msgid "Set up Claude Code"
+msgstr ""
+
+#: weitblick/agent/ui.py:198
+msgid "Copy"
+msgstr ""
+
+#: weitblick/agent/ui.py:204
+msgid "Permissions"
+msgstr ""
+
+#: weitblick/agent/ui.py:204
+msgid "None"
+msgstr ""
+
+#: weitblick/agent/ui.py:207
+msgid "Audit log"
+msgstr ""
+
+#: weitblick/agent/ui.py:269
+msgid "The MCP socket couldn’t be started: {error}"
+msgstr ""
+
+#: weitblick/agent/ui.py:284
+msgid "“{client}” on “{connection}”"
+msgstr ""
+
+#: weitblick/agent/ui.py:286
+msgid "Revoke"
+msgstr ""
+
+#: weitblick/agent/ui.py:304
+msgid "Copied"
+msgstr ""
+
+#: weitblick/agent/ui.py:44
+msgid "This session ({id})"
+msgstr ""
+
+#: weitblick/agent/ui.py:46
+msgid "Until {time}"
+msgstr ""
+
+#: weitblick/agent/ui.py:66 weitblick/ui/editor.py:345
+msgid "AI agent access"
+msgstr ""
+
+#: weitblick/agent/ui.py:74
+msgid "“{client}” wants to control “{connection}”"
+msgstr ""
+
+#: weitblick/agent/ui.py:77
+msgid "{host}: screenshots, mouse, keyboard and clipboard of this Windows session. The agent waits up to 2 minutes for your answer."
+msgstr ""
+
+#: weitblick/agent/ui.py:94
+msgid "Deny"
+msgstr ""
+
+#: weitblick/agent/ui.py:96
+msgid "Allow once"
+msgstr ""
+
+#: weitblick/agent/ui.py:96
+msgid "This session, until it disconnects"
+msgstr ""
+
+#: weitblick/agent/ui.py:98
+msgid "Allow for 10 minutes"
+msgstr ""
+
+#: weitblick/agent/ui.py:99
+msgid "Allow today"
+msgstr ""
+
+#: weitblick/agent/ui.py:99
+msgid "Until midnight"
+msgstr ""
+
+#: weitblick/app.py:201
+msgid "Can’t open VNC"
+msgstr ""
+
+#: weitblick/app.py:202
+msgid "No app for VNC (vnc://) links is installed, e.g. Remmina or GNOME Connections.\n{error}"
+msgstr ""
+
+#: weitblick/app.py:321
+msgid "Duplicating failed"
+msgstr ""
+
+#: weitblick/app.py:327
+msgid "Delete “{name}”?"
+msgstr ""
+
+#: weitblick/app.py:328
+msgid "Saved passwords are also removed from the keyring."
+msgstr ""
+
+#: weitblick/app.py:329 weitblick/ui/dialogs.py:124 weitblick/ui/dialogs.py:147
+msgid "Cancel"
+msgstr ""
+
+#: weitblick/app.py:330
+msgid "Delete"
+msgstr ""
+
+#: weitblick/app.py:339
+msgid "Deleting failed"
+msgstr ""
+
+#: weitblick/app.py:352
+msgid "Wake-on-LAN failed"
+msgstr ""
+
+#: weitblick/app.py:354
+msgid "Wake-up packet sent to “{name}”."
+msgstr ""
+
+#: weitblick/app.py:393
+msgid "Remote Desktop for Windows PCs, made for Linux. A port of the macOS app, built on FreeRDP."
+msgstr ""
+
+#: weitblick/app.py:395
+msgid "Built on"
+msgstr ""
+
+#: weitblick/app.py:40
+msgid "Start without a window (for AI agents)"
+msgstr ""
+
+#: weitblick/app.py:41
+msgid "Show the version"
+msgstr ""
+
+#: weitblick/clipboard/sync.py:239
+msgid "Copying %d file from the remote PC…"
+msgid_plural "Copying %d files from the remote PC…"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/clipboard/sync.py:247
+msgid "Copying files from the remote PC… %d %%"
+msgstr ""
+
+#: weitblick/clipboard/sync.py:251
+msgid "Copying files from the remote PC failed."
+msgstr ""
+
+#: weitblick/clipboard/sync.py:253
+msgid "Copied %d file from the remote PC."
+msgid_plural "Copied %d files from the remote PC."
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/clipboard/sync.py:663
+msgid "The copied files (%s) are larger than %s and aren’t offered to the remote PC."
+msgstr ""
+
+#: weitblick/clipboard/sync.py:667
+msgid "The files copied on the remote PC (%s) are larger than %s and can’t be pasted here."
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:30
+msgid "German"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:31
+msgid "German (Switzerland)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:32
+msgid "English (US)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:33
+msgid "English (US, international)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:34
+msgid "English (UK)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:35
+msgid "English (Ireland)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:36
+msgid "French"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:37
+msgid "French (Belgium)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:38
+msgid "French (Switzerland)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:39
+msgid "French (Canada)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:40
+msgid "Dutch"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:41
+msgid "Dutch (Belgium)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:42
+msgid "Italian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:43
+msgid "Spanish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:44
+msgid "Spanish (Latin America)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:45
+msgid "Portuguese"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:46
+msgid "Portuguese (Brazil)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:47
+msgid "Danish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:48
+msgid "Norwegian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:49
+msgid "Swedish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:50
+msgid "Finnish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:51
+msgid "Icelandic"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:52
+msgid "Polish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:53
+msgid "Czech"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:54
+msgid "Slovak"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:55
+msgid "Hungarian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:56
+msgid "Slovenian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:57
+msgid "Croatian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:58
+msgid "Romanian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:59
+msgid "Estonian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:60
+msgid "Latvian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:61
+msgid "Lithuanian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:62
+msgid "Turkish"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:63
+msgid "Greek"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:64
+msgid "Russian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:65
+msgid "Ukrainian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:66
+msgid "Bulgarian"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:67
+msgid "Serbian (Cyrillic)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:68
+msgid "Hebrew"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:69
+msgid "Arabic"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:70
+msgid "Japanese"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:71
+msgid "Korean"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:72
+msgid "Chinese (Simplified)"
+msgstr ""
+
+#: weitblick/keyboard/layouts.py:73
+msgid "Chinese (Traditional)"
+msgstr ""
+
+#: weitblick/rdp/session.py:111
+msgid "Disconnected."
+msgstr ""
+
+#: weitblick/rdp/session.py:112
+msgid "Host unreachable."
+msgstr ""
+
+#: weitblick/rdp/session.py:113
+msgid "Sign-in failed: wrong user name or password."
+msgstr ""
+
+#: weitblick/rdp/session.py:114
+msgid "Sign-in failed: credentials missing."
+msgstr ""
+
+#: weitblick/rdp/session.py:115
+msgid "Account locked."
+msgstr ""
+
+#: weitblick/rdp/session.py:116
+msgid "Account disabled, expired or not allowed to sign in here."
+msgstr ""
+
+#: weitblick/rdp/session.py:117
+msgid "Password expired. Set a new password in Windows."
+msgstr ""
+
+#: weitblick/rdp/session.py:118
+msgid "Access denied: the user isn’t allowed to sign in via Remote Desktop."
+msgstr ""
+
+#: weitblick/rdp/session.py:120
+msgid "Certificate rejected."
+msgstr ""
+
+#: weitblick/rdp/session.py:121
+msgid "Secure connection failed (TLS/security negotiation)."
+msgstr ""
+
+#: weitblick/rdp/session.py:122
+msgid "The server requires Network Level Authentication (NLA). Turn NLA on for this connection."
+msgstr ""
+
+#: weitblick/rdp/session.py:124
+msgid "The server disconnected."
+msgstr ""
+
+#: weitblick/rdp/session.py:125
+msgid "Another connection took over the session."
+msgstr ""
+
+#: weitblick/rdp/session.py:126
+msgid "Session ended in Windows."
+msgstr ""
+
+#: weitblick/rdp/session.py:127
+msgid "Timed out."
+msgstr ""
+
+#: weitblick/rdp/session.py:128
+msgid "Connection lost."
+msgstr ""
+
+#: weitblick/rdp/session.py:129
+msgid "Connection ended."
+msgstr ""
+
+#: weitblick/store/draft.py:48
+msgid "Enter a host."
+msgstr ""
+
+#: weitblick/store/draft.py:50
+msgid "The host can’t contain spaces."
+msgstr ""
+
+#: weitblick/store/draft.py:52
+msgid "The port must be between 1 and 65535."
+msgstr ""
+
+#: weitblick/store/draft.py:56
+msgid "The fixed resolution must be between 200 and 8192 pixels."
+msgstr ""
+
+#: weitblick/store/jump.py:105
+msgid "Not a list of texts; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:117
+msgid "Undocumented Jump code; not interpreted, the default stays."
+msgstr ""
+
+#: weitblick/store/jump.py:118 weitblick/store/remmina.py:103
+msgid "No equivalent; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:148
+msgid "Not a readable Jump file (no JSON object or larger than 4 MiB)."
+msgstr ""
+
+#: weitblick/store/jump.py:163
+msgid "UniqueId missing; without it a later import couldn’t be matched. Not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:168
+msgid "Duplicate UniqueId in the Jump folder; this file was not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:173
+msgid "Several saved connections belong to this Jump connection; clean them up first. Not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:179
+msgid "Unknown protocol (ProtocolTypeCode); not imported rather than guessed."
+msgstr ""
+
+#: weitblick/store/jump.py:185
+msgid "Host missing; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:218 weitblick/store/jump.py:144
+msgid "File unreadable or invalid; nothing planned."
+msgstr ""
+
+#: weitblick/store/jump.py:259
+msgid "Audio: Jump’s code 2 read as “play on this computer”; please check."
+msgstr ""
+
+#: weitblick/store/jump.py:262
+msgid "Unknown audio code {code}; audio playback turned off to be safe."
+msgstr ""
+
+#: weitblick/store/jump.py:263
+msgid "Unknown Jump value; playback off."
+msgstr ""
+
+#: weitblick/store/jump.py:281
+msgid "Not an object; drive not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:295
+msgid "Name or path missing; drive not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:299
+msgid "Drive “{name}” is read-only in Jump and is not shared (sharing needs write access)."
+msgstr ""
+
+#: weitblick/store/jump.py:314
+msgid "Automatic layout detection takes precedence."
+msgstr ""
+
+#: weitblick/store/jump.py:32
+msgid "The password isn’t in the Jump file; you’ll be asked for it on the first connection (Jump’s keychain stays untouched)."
+msgstr ""
+
+#: weitblick/store/jump.py:322
+msgid "No valid keyboard layout (KeyboardLocaleId); it is detected automatically."
+msgstr ""
+
+#: weitblick/store/jump.py:325
+msgid "Reference to a Jump keyboard profile; the connection’s own keyboard settings apply."
+msgstr ""
+
+#: weitblick/store/jump.py:355
+msgid "Gateway reference saved; the gateway settings themselves are not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:60
+msgid "Not text; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:69
+msgid "Not a number; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:78 weitblick/store/remmina.py:74
+msgid "Not an integer; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:87 weitblick/store/remmina.py:87
+msgid "Not a yes/no value; not imported."
+msgstr ""
+
+#: weitblick/store/jump.py:96
+msgid "Not a list; not imported."
+msgstr ""
+
+#: weitblick/store/library.py:44
+msgid "The connections in “{path}” couldn’t be read. The file stays unchanged."
+msgstr ""
+
+#: weitblick/store/library.py:95 weitblick/store/store.py:179
+msgid "{name} copy"
+msgstr ""
+
+#: weitblick/store/rdpfile.py:109
+msgid "Line {number} unreadable; ignored."
+msgstr ""
+
+#: weitblick/store/rdpfile.py:113
+msgid "Saved password in the file ignored; you’ll be asked for it when connecting."
+msgstr ""
+
+#: weitblick/store/rdpfile.py:116
+msgid "Field {key} appears twice; the last value applies."
+msgstr ""
+
+#: weitblick/store/rdpfile.py:156
+msgid "The file’s drive selection (Windows drives) is not imported as local folders; share folders yourself."
+msgstr ""
+
+#: weitblick/store/rdpfile.py:174
+msgid "Setting not supported; not imported."
+msgstr ""
+
+#: weitblick/store/remmina.py:101
+msgid "Saved password; not imported."
+msgstr ""
+
+#: weitblick/store/remmina.py:153
+msgid "Not a readable Remmina file; nothing planned."
+msgstr ""
+
+#: weitblick/store/remmina.py:168
+msgid "Several saved connections belong to this Remmina connection; clean them up first. Not imported."
+msgstr ""
+
+#: weitblick/store/remmina.py:178
+msgid "Only RDP and VNC connections are imported; this one is not."
+msgstr ""
+
+#: weitblick/store/remmina.py:180
+msgid "Protocol not supported."
+msgstr ""
+
+#: weitblick/store/remmina.py:184
+msgid "Host missing or invalid; not imported."
+msgstr ""
+
+#: weitblick/store/remmina.py:186
+msgid "Not a host name or address."
+msgstr ""
+
+#: weitblick/store/remmina.py:209
+msgid "Settings out of range; not imported."
+msgstr ""
+
+#: weitblick/store/remmina.py:266 weitblick/store/remmina.py:249 weitblick/store/remmina.py:286
+msgid "Unknown Remmina value; the default stays."
+msgstr ""
+
+#: weitblick/store/remmina.py:298
+msgid "RD Gateway saved, but Weitblick Remote can’t connect through a gateway yet."
+msgstr ""
+
+#: weitblick/store/remmina.py:45
+msgid "Remmina’s saved password isn’t imported; you’ll be asked for it on the first connection."
+msgstr ""
+
+#: weitblick/ui/activity.py:22
+msgid "Connecting…"
+msgstr ""
+
+#: weitblick/ui/activity.py:24
+msgid "Connected"
+msgstr ""
+
+#: weitblick/ui/activity.py:26
+msgid "Reconnecting (attempt {n})…"
+msgstr ""
+
+#: weitblick/ui/activity.py:27
+msgid "Disconnected"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:100
+msgid "SHA-256"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:119
+msgid "The certificate names a different computer than “{host}”."
+msgstr ""
+
+#: weitblick/ui/dialogs.py:125
+msgid "Connect Once"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:126
+msgid "Trust New Certificate"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:126
+msgid "Always Trust"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:142
+msgid "Disconnect from “{name}”?"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:143
+msgid "The agent loses this session. Open programs keep running in Windows."
+msgstr ""
+
+#: weitblick/ui/dialogs.py:144
+msgid "The tab closes. Open programs keep running in Windows."
+msgstr ""
+
+#: weitblick/ui/dialogs.py:145
+msgid "Don’t ask again"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:148 weitblick/ui/shortcuts.py:27 weitblick/ui/window.py:141
+msgid "Disconnect"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:158 weitblick/ui/editor.py:420 weitblick/ui/importing.py:139
+msgid "OK"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:29
+msgid "Sign In"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:36 weitblick/ui/overview.py:52 weitblick/ui/overview.py:201
+msgid "Connect"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:41 weitblick/ui/session_page.py:656
+msgid "Sign in to “{name}”"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:43 weitblick/ui/editor.py:147
+msgid "User"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:44 weitblick/ui/editor.py:148
+msgid "Domain (optional)"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:45 weitblick/ui/editor.py:150
+msgid "Password"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:46
+msgid "Save in keyring"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:85
+msgid "The certificate of “{name}” has changed"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:86
+msgid "A different certificate is saved for this connection. That happens after a reinstall or a new certificate, but it can also be an attack. Continue only if you know the reason."
+msgstr ""
+
+#: weitblick/ui/dialogs.py:89
+msgid "Unknown certificate from “{name}”"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:90
+msgid "The computer identifies itself with a self-signed certificate, which is common for Remote Desktop. To be sure, compare the fingerprint with the one shown on the computer."
+msgstr ""
+
+#: weitblick/ui/dialogs.py:97
+msgid "Host"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:98
+msgid "Issued to"
+msgstr ""
+
+#: weitblick/ui/dialogs.py:99
+msgid "Issuer"
+msgstr ""
+
+#: weitblick/ui/editor.py:119
+msgid "Name"
+msgstr ""
+
+#: weitblick/ui/editor.py:130
+msgid "Type"
+msgstr ""
+
+#: weitblick/ui/editor.py:130
+msgid "Remote Desktop (RDP)"
+msgstr ""
+
+#: weitblick/ui/editor.py:130
+msgid "Screen Sharing (VNC)"
+msgstr ""
+
+#: weitblick/ui/editor.py:136
+msgid "Host (computer name or IP address)"
+msgstr ""
+
+#: weitblick/ui/editor.py:142
+msgid "Port"
+msgstr ""
+
+#: weitblick/ui/editor.py:146
+msgid "Sign-in"
+msgstr ""
+
+#: weitblick/ui/editor.py:150
+msgid "Password (saved – type to replace)"
+msgstr ""
+
+#: weitblick/ui/editor.py:154
+msgid "Delete saved password"
+msgstr ""
+
+#: weitblick/ui/editor.py:159
+msgid "Opens in your VNC app (a vnc:// link, e.g. Remmina or GNOME Connections), which handles sign-in and settings itself."
+msgstr ""
+
+#: weitblick/ui/editor.py:163
+msgid "Notes"
+msgstr ""
+
+#: weitblick/ui/editor.py:186
+msgid "Resize with the window"
+msgstr ""
+
+#: weitblick/ui/editor.py:188
+msgid "Width"
+msgstr ""
+
+#: weitblick/ui/editor.py:189
+msgid "Height"
+msgstr ""
+
+#: weitblick/ui/editor.py:198
+msgid "Resolution"
+msgstr ""
+
+#: weitblick/ui/editor.py:198
+msgid "Match window size"
+msgstr ""
+
+#: weitblick/ui/editor.py:198
+msgid "Fixed size"
+msgstr ""
+
+#: weitblick/ui/editor.py:206
+msgid "HiDPI (full resolution)"
+msgstr ""
+
+#: weitblick/ui/editor.py:207
+msgid "One Windows pixel per screen pixel, sharp on HiDPI screens. Off: Windows draws at the logical size and the picture is scaled up (softer, less data)."
+msgstr ""
+
+#: weitblick/ui/editor.py:209
+msgid "Automatic"
+msgstr ""
+
+#: weitblick/ui/editor.py:214
+msgid "Scaling in Windows"
+msgstr ""
+
+#: weitblick/ui/editor.py:215
+msgid "Start in full screen"
+msgstr ""
+
+#: weitblick/ui/editor.py:225
+msgid "Keys go to Windows as on a PC keyboard. Shortcuts with Ctrl+Alt+Super stay in Weitblick Remote; Ctrl+Alt+End sends Ctrl+Alt+Del."
+msgstr ""
+
+#: weitblick/ui/editor.py:229 weitblick/ui/window.py:131
+msgid "Typing"
+msgstr ""
+
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:125
+msgid "Smart (AltGr characters as Unicode)"
+msgstr ""
+
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:126
+msgid "Characters as Unicode"
+msgstr ""
+
+#: weitblick/ui/editor.py:230 weitblick/ui/window.py:127
+msgid "Physical keys only"
+msgstr ""
+
+#: weitblick/ui/editor.py:233
+msgid "Smart sends keys, but characters typed with AltGr arrive as shown on this computer’s layout. Unicode helps when the layouts differ; games and some shortcuts then don’t work."
+msgstr ""
+
+#: weitblick/ui/editor.py:237
+msgid "Automatic (same as this computer: {name})"
+msgstr ""
+
+#: weitblick/ui/editor.py:240
+msgid "Keyboard layout in Windows"
+msgstr ""
+
+#: weitblick/ui/editor.py:251
+msgid "Clipboard"
+msgstr ""
+
+#: weitblick/ui/editor.py:252
+msgid "Text, images and files in both directions"
+msgstr ""
+
+#: weitblick/ui/editor.py:254
+msgid "Sound"
+msgstr ""
+
+#: weitblick/ui/editor.py:254
+msgid "Play on this computer"
+msgstr ""
+
+#: weitblick/ui/editor.py:254
+msgid "Leave on the remote PC"
+msgstr ""
+
+#: weitblick/ui/editor.py:254
+msgid "Off"
+msgstr ""
+
+#: weitblick/ui/editor.py:257
+msgid "Microphone"
+msgstr ""
+
+#: weitblick/ui/editor.py:258
+msgid "Printers"
+msgstr ""
+
+#: weitblick/ui/editor.py:259
+msgid "Local printers appear in Windows (needs the “Microsoft Print to PDF” driver there)"
+msgstr ""
+
+#: weitblick/ui/editor.py:262
+msgid "Drives"
+msgstr ""
+
+#: weitblick/ui/editor.py:263
+msgid "Appear in Windows as \\\\tsclient\\<name>."
+msgstr ""
+
+#: weitblick/ui/editor.py:264
+msgid "Add Folder…"
+msgstr ""
+
+#: weitblick/ui/editor.py:267
+msgid "Share folders as drives"
+msgstr ""
+
+#: weitblick/ui/editor.py:283
+msgid "Read-only: not shared (sharing needs write access)."
+msgstr ""
+
+#: weitblick/ui/editor.py:288
+msgid "Remove"
+msgstr ""
+
+#: weitblick/ui/editor.py:296
+msgid "Share a Folder"
+msgstr ""
+
+#: weitblick/ui/editor.py:326
+msgid "Network Level Authentication (NLA)"
+msgstr ""
+
+#: weitblick/ui/editor.py:328
+msgid "Signs in before the connection is set up. Turn off only for very old Windows versions."
+msgstr ""
+
+#: weitblick/ui/editor.py:329
+msgid "Don’t check the certificate"
+msgstr ""
+
+#: weitblick/ui/editor.py:331
+msgid "Never asks about the certificate. Only on trusted networks."
+msgstr ""
+
+#: weitblick/ui/editor.py:332
+msgid "Console session"
+msgstr ""
+
+#: weitblick/ui/editor.py:333
+msgid "Connects to the console like “mstsc /admin”"
+msgstr ""
+
+#: weitblick/ui/editor.py:336
+msgid "Trusted certificates (SHA-256)"
+msgstr ""
+
+#: weitblick/ui/editor.py:342
+msgid "Whether AI agents may control this connection over MCP (Settings → AI Agents). “Ask” shows a prompt each time an agent wants it."
+msgstr ""
+
+#: weitblick/ui/editor.py:345
+msgid "Ask"
+msgstr ""
+
+#: weitblick/ui/editor.py:345 weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:133
+msgid "Never"
+msgstr ""
+
+#: weitblick/ui/editor.py:357
+msgid "None yet. You’ll be asked on the first connection."
+msgstr ""
+
+#: weitblick/ui/editor.py:366
+msgid "Forget"
+msgstr ""
+
+#: weitblick/ui/editor.py:381
+msgid "Program instead of desktop"
+msgstr ""
+
+#: weitblick/ui/editor.py:382
+msgid "Program, e.g. C:\\Program Files\\App\\app.exe"
+msgstr ""
+
+#: weitblick/ui/editor.py:384
+msgid "Working directory (optional)"
+msgstr ""
+
+#: weitblick/ui/editor.py:387
+msgid "Load balance info (optional)"
+msgstr ""
+
+#: weitblick/ui/editor.py:389
+msgid "Wake-on-LAN: MAC addresses, separated by commas"
+msgstr ""
+
+#: weitblick/ui/editor.py:394
+msgid "Gateway"
+msgstr ""
+
+#: weitblick/ui/editor.py:395
+msgid "{host} (not supported yet)"
+msgstr ""
+
+#: weitblick/ui/editor.py:396
+msgid "imported"
+msgstr ""
+
+#: weitblick/ui/editor.py:419
+msgid "Connection not saved"
+msgstr ""
+
+#: weitblick/ui/editor.py:58 weitblick/ui/window.py:91
+msgid "New Connection"
+msgstr ""
+
+#: weitblick/ui/editor.py:65
+msgid "Save"
+msgstr ""
+
+#: weitblick/ui/editor.py:69 weitblick/ui/settings_dialog.py:26
+msgid "General"
+msgstr ""
+
+#: weitblick/ui/editor.py:70
+msgid "Display"
+msgstr ""
+
+#: weitblick/ui/editor.py:71 weitblick/ui/settings_dialog.py:39
+msgid "Keyboard"
+msgstr ""
+
+#: weitblick/ui/editor.py:72
+msgid "Devices"
+msgstr ""
+
+#: weitblick/ui/editor.py:73
+msgid "Security"
+msgstr ""
+
+#: weitblick/ui/editor.py:74
+msgid "Advanced"
+msgstr ""
+
+#: weitblick/ui/importing.py:104
+msgid "Can’t read Jump connections"
+msgstr ""
+
+#: weitblick/ui/importing.py:149
+msgid "Import from {source}"
+msgstr ""
+
+#: weitblick/ui/importing.py:166
+msgid "{n} new"
+msgstr ""
+
+#: weitblick/ui/importing.py:168
+msgid "{n} changed"
+msgstr ""
+
+#: weitblick/ui/importing.py:170
+msgid "{n} unchanged"
+msgstr ""
+
+#: weitblick/ui/importing.py:173
+msgid "{n} not imported"
+msgstr ""
+
+#: weitblick/ui/importing.py:174 weitblick/ui/overview.py:127
+msgid "No connections found"
+msgstr ""
+
+#: weitblick/ui/importing.py:176
+msgid "{counts}. {source}’s files are only read, never changed."
+msgstr ""
+
+#: weitblick/ui/importing.py:181 weitblick/ui/settings_dialog.py:53
+msgid "Connections"
+msgstr ""
+
+#: weitblick/ui/importing.py:188
+msgid "New"
+msgstr ""
+
+#: weitblick/ui/importing.py:188
+msgid "Update"
+msgstr ""
+
+#: weitblick/ui/importing.py:189
+msgid "Unchanged"
+msgstr ""
+
+#: weitblick/ui/importing.py:206
+msgid "Not imported"
+msgstr ""
+
+#: weitblick/ui/importing.py:21
+msgid "Open .rdp File"
+msgstr ""
+
+#: weitblick/ui/importing.py:22
+msgid "Remote Desktop files"
+msgstr ""
+
+#: weitblick/ui/importing.py:223
+msgid "Import {n} Connection"
+msgid_plural "Import {n} Connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/importing.py:237
+msgid "Imported {n} connection."
+msgid_plural "Imported {n} connections."
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/importing.py:47 weitblick/ui/importing.py:55 weitblick/ui/importing.py:232
+msgid "Import failed"
+msgstr ""
+
+#: weitblick/ui/importing.py:47
+msgid "{file}: couldn’t be imported ({error})."
+msgstr ""
+
+#: weitblick/ui/importing.py:59
+msgid "Imported “{name}” with notes"
+msgstr ""
+
+#: weitblick/ui/importing.py:60
+msgid "Not imported:"
+msgstr ""
+
+#: weitblick/ui/importing.py:62
+msgid "Imported “{name}”."
+msgstr ""
+
+#: weitblick/ui/importing.py:66
+msgid "Export as .rdp File"
+msgstr ""
+
+#: weitblick/ui/importing.py:76
+msgid "Export failed"
+msgstr ""
+
+#: weitblick/ui/importing.py:86
+msgid "Choose Remmina’s Folder"
+msgstr ""
+
+#: weitblick/ui/importing.py:91
+msgid "Can’t read Remmina connections"
+msgstr ""
+
+#: weitblick/ui/importing.py:98
+msgid "Choose the folder with the .jump files (copied from the Mac)"
+msgstr ""
+
+#: weitblick/ui/overview.py:102
+msgid "By Name"
+msgstr ""
+
+#: weitblick/ui/overview.py:102
+msgid "Recently Used First"
+msgstr ""
+
+#: weitblick/ui/overview.py:103
+msgid "Sort Order"
+msgstr ""
+
+#: weitblick/ui/overview.py:119
+msgid "No Connections Yet"
+msgstr ""
+
+#: weitblick/ui/overview.py:120
+msgid "Create a connection or import your connections from Remmina, Jump Desktop or an .rdp file."
+msgstr ""
+
+#: weitblick/ui/overview.py:123
+msgid "New Connection…"
+msgstr ""
+
+#: weitblick/ui/overview.py:124 weitblick/ui/window.py:98
+msgid "Import from Remmina…"
+msgstr ""
+
+#: weitblick/ui/overview.py:129
+msgid "Can’t Read Connections"
+msgstr ""
+
+#: weitblick/ui/overview.py:16
+msgid "Never connected"
+msgstr ""
+
+#: weitblick/ui/overview.py:19
+msgid "Last used just now"
+msgstr ""
+
+#: weitblick/ui/overview.py:201
+msgid "Edit…"
+msgstr ""
+
+#: weitblick/ui/overview.py:202
+msgid "Duplicate"
+msgstr ""
+
+#: weitblick/ui/overview.py:209
+msgid "Wake Up (Wake-on-LAN)"
+msgstr ""
+
+#: weitblick/ui/overview.py:212
+msgid "Export as .rdp File…"
+msgstr ""
+
+#: weitblick/ui/overview.py:217
+msgid "Delete…"
+msgstr ""
+
+#: weitblick/ui/overview.py:22
+msgid "Last used {n} minute ago"
+msgid_plural "Last used {n} minutes ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/overview.py:25
+msgid "Last used {n} hour ago"
+msgid_plural "Last used {n} hours ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/overview.py:28
+msgid "Last used {n} day ago"
+msgid_plural "Last used {n} days ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/overview.py:30
+msgid "Last used {n} month ago"
+msgid_plural "Last used {n} months ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: weitblick/ui/overview.py:49
+msgid "Watch"
+msgstr ""
+
+#: weitblick/ui/overview.py:50
+msgid "Open the agent’s session in a tab"
+msgstr ""
+
+#: weitblick/ui/overview.py:55
+msgid "More"
+msgstr ""
+
+#: weitblick/ui/overview.py:86
+msgid "Agent paused"
+msgstr ""
+
+#: weitblick/ui/overview.py:86
+msgid "Agent"
+msgstr ""
+
+#: weitblick/ui/overview.py:87
+msgid "Controlled by “{client}”"
+msgstr ""
+
+#: weitblick/ui/overview.py:99
+msgid "Search connections"
+msgstr ""
+
+#: weitblick/ui/session_page.py:256
+msgid "The session couldn’t be created."
+msgstr ""
+
+#: weitblick/ui/session_page.py:280
+msgid "No password is saved for this connection."
+msgstr ""
+
+#: weitblick/ui/session_page.py:301
+msgid "Password not saved"
+msgstr ""
+
+#: weitblick/ui/session_page.py:302
+msgid "The keyring didn’t accept the password. The session continues anyway."
+msgstr ""
+
+#: weitblick/ui/session_page.py:623 weitblick/ui/window.py:140
+msgid "Reconnect"
+msgstr ""
+
+#: weitblick/ui/session_page.py:625
+msgid "Sign In…"
+msgstr ""
+
+#: weitblick/ui/session_page.py:627
+msgid "Close Tab"
+msgstr ""
+
+#: weitblick/ui/session_page.py:647
+msgid "Connecting to {host}…"
+msgstr ""
+
+#: weitblick/ui/session_page.py:650
+msgid "Connection lost"
+msgstr ""
+
+#: weitblick/ui/session_page.py:651
+msgid "Reconnecting, attempt {n}…"
+msgstr ""
+
+#: weitblick/ui/session_page.py:680
+msgid "You have taken over from the agent ({client})"
+msgstr ""
+
+#: weitblick/ui/session_page.py:681
+msgid "Resume agent"
+msgstr ""
+
+#: weitblick/ui/session_page.py:683
+msgid "An agent is controlling this session ({client})"
+msgstr ""
+
+#: weitblick/ui/session_page.py:684
+msgid "Take over"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:22 weitblick/ui/shortcuts.py:36 weitblick/ui/window.py:102
+msgid "Settings"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:27
+msgid "Sessions"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:28
+msgid "Open sessions in separate windows"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:29
+msgid "Instead of tabs next to the overview, e.g. for several monitors"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:33
+msgid "Ask before closing a session"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:40
+msgid "Ctrl+Alt+Super shortcuts always stay in Weitblick Remote: Ctrl+Alt+Super+F full screen, Ctrl+Alt+Super+←/→ and 1…9 switch tabs."
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:42
+msgid "Send system shortcuts to Windows"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:43
+msgid "Alt+Tab, Super and other shortcuts the desktop would take"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:44
+msgid "In full screen"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:44 weitblick/ui/window.py:133
+msgid "Always"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:52
+msgid "Data"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:56
+msgid "Open Folder"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:60
+msgid "Passwords"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:60
+msgid "In the keyring (Secret Service), on this computer only"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:64
+msgid "AI Agents"
+msgstr ""
+
+#: weitblick/ui/settings_dialog.py:70
+msgid "Agent control isn’t available in this build."
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:22
+msgid "Sessions (stay in Weitblick Remote)"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:23
+msgid "Full screen"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:24
+msgid "Next tab"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:25
+msgid "Previous tab"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:26
+msgid "Overview, tab 2…9"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:29
+msgid "Sent to Windows"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:30
+msgid "Ctrl+Alt+Del"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:32 weitblick/ui/window.py:63
+msgid "Overview"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:33
+msgid "New connection"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:34
+msgid "Search"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:35
+msgid "Open .rdp file"
+msgstr ""
+
+#: weitblick/ui/shortcuts.py:37 weitblick/ui/window.py:107
+msgid "Quit"
+msgstr ""
+
+#: weitblick/ui/window.py:103
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: weitblick/ui/window.py:104
+msgid "About Weitblick Remote"
+msgstr ""
+
+#: weitblick/ui/window.py:110
+msgid "Main Menu"
+msgstr ""
+
+#: weitblick/ui/window.py:113
+msgid "Full Screen (Ctrl+Alt+Super+F)"
+msgstr ""
+
+#: weitblick/ui/window.py:120
+msgid "Send {keys}"
+msgstr ""
+
+#: weitblick/ui/window.py:123
+msgid "Keys"
+msgstr ""
+
+#: weitblick/ui/window.py:133
+msgid "In Full Screen"
+msgstr ""
+
+#: weitblick/ui/window.py:137
+msgid "Pass Alt+Tab, Super… to Windows"
+msgstr ""
+
+#: weitblick/ui/window.py:139
+msgid "Sync Clipboard"
+msgstr ""
+
+#: weitblick/ui/window.py:144
+msgid "Session"
+msgstr ""
+
+#: weitblick/ui/window.py:23
+msgid "Windows key"
+msgstr ""
+
+#: weitblick/ui/window.py:25
+msgid "Task Manager (Ctrl+Shift+Esc)"
+msgstr ""
+
+#: weitblick/ui/window.py:26
+msgid "Print Screen"
+msgstr ""
+
+#: weitblick/ui/window.py:321
+msgid "Agent: {client}"
+msgstr ""
+
+#: weitblick/ui/window.py:37 weitblick/ui/window.py:47 weitblick/ui/window.py:197
+msgid "Weitblick Remote"
+msgstr ""
+
+#: weitblick/ui/window.py:413
+msgid "Disconnect all sessions?"
+msgstr ""
+
+#: weitblick/ui/window.py:414
+msgid "{n} sessions are open in this window. Open programs keep running in Windows."
+msgstr ""
+
+#: weitblick/ui/window.py:416
+msgid "Disconnect All"
+msgstr ""
+
+#: weitblick/ui/window.py:97
+msgid "Open .rdp File…"
+msgstr ""
+
+#: weitblick/ui/window.py:99
+msgid "Import from Jump Desktop…"
+msgstr ""

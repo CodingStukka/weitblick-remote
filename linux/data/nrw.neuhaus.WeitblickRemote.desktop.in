@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Weitblick Remote
+GenericName=Remote Desktop Client
+GenericName[de]=Remote-Desktop-Client
+Comment=Connect to Windows PCs over RDP
+Comment[de]=Mit Windows-PCs über RDP verbinden
+Exec=@BINDIR@/weitblick-remote %F
+Icon=nrw.neuhaus.WeitblickRemote
+Terminal=false
+Categories=Network;RemoteAccess;GTK;
+Keywords=RDP;Remote Desktop;Windows;FreeRDP;MCP;
+MimeType=application/x-rdp;
+StartupNotify=true
+StartupWMClass=nrw.neuhaus.WeitblickRemote
+DBusActivatable=false

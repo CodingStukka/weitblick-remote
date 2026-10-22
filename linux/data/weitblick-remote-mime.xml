@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-rdp">
+    <comment>Remote Desktop connection</comment>
+    <comment xml:lang="de">Remotedesktopverbindung</comment>
+    <icon name="nrw.neuhaus.WeitblickRemote"/>
+    <glob pattern="*.rdp" weight="60"/>
+    <glob pattern="*.RDP" weight="60"/>
+  </mime-type>
+</mime-info>

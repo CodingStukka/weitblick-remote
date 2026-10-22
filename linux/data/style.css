@@ -1,0 +1,23 @@
+/* Weitblick Remote: small additions to libadwaita's look. */
+
+.wb-session-status {
+  padding: 24px 32px;
+  border-radius: 18px;
+}
+
+.wb-agent-banner {
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+}
+
+.wb-agent-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: alpha(@accent_bg_color, 0.18);
+  color: @accent_color;
+  font-weight: bold;
+}
+
+.wb-session-view {
+  background-color: black;
+}
